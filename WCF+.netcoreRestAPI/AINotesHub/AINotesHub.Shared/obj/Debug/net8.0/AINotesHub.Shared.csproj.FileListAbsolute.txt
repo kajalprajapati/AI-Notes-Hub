@@ -1,0 +1,14 @@
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\bin\Debug\net8.0\AINotesHub.Shared.deps.json
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\bin\Debug\net8.0\AINotesHub.Shared.runtimeconfig.json
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\bin\Debug\net8.0\AINotesHub.Shared.dll
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\bin\Debug\net8.0\AINotesHub.Shared.pdb
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.AssemblyInfoInputs.cache
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.AssemblyInfo.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.csproj.CoreCompileInputs.cache
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.sourcelink.json
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.dll
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\refint\AINotesHub.Shared.dll
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.pdb
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\AINotesHub.Shared.genruntimeconfig.cache
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.Shared\obj\Debug\net8.0\ref\AINotesHub.Shared.dll

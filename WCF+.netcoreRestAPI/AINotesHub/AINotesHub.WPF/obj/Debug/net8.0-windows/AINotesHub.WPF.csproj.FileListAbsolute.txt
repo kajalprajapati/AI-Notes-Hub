@@ -1,0 +1,9 @@
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\AINotesHub.WPF.csproj.AssemblyReference.cache
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\Themes\LightTheme.baml
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\Views\FolderCard.g.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\Views\NotesView.g.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\Views\SidebarControl.g.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\AINotesHub.WPF_MarkupCompile.cache
+C:\Users\praja\OneDrive\Desktop\Kajal\Practice\Full Stack Project\WCF+.netcoreRestAPI\AINotesHub\AINotesHub.WPF\obj\Debug\net8.0-windows\AINotesHub.WPF_MarkupCompile.lref
