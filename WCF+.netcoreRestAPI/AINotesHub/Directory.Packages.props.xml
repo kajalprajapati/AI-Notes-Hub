@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageVersion Include="Dapper" Version="*" />
+		<PackageVersion Include="Serilog" Version="*"/>
+		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="*" />
+		
+		<PackageVersion Include="MaterialDesignThemes" Version="5.2.1" />
+		<PackageVersion Include="MaterialDesignColors" Version="2.1.3" />
+		<!--<PackageVersion Include="MaterialDesignThemes" Version="5.2.1" />-->
+	</ItemGroup>
+</Project>

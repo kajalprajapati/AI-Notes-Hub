@@ -6,57 +6,340 @@
         xmlns:local="clr-namespace:AINotesHub.WPF"
         xmlns:converters="clr-namespace:AINotesHub.WPF.Converters"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime" 
+        xmlns:views="clr-namespace:AINotesHub.WPF.Views"
+        xmlns:vm="clr-namespace:AINotesHub.WPF.ViewModels"
+        xmlns:enums="clr-namespace:AINotesHub.WPF.Enums"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        Title="AI Notes Hub" Height="450" Width="800" 
-        Background="#FFFFFF" Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen" 
+        HorizontalAlignment="Stretch" 
+        VerticalAlignment="Stretch"
+        Title="AI Notes Hub" 
+        Height="450" 
+        Width="800" 
+        Background="#EBF3FB" 
+        Loaded="Window_Loaded" 
+        x:Name="RootWindow"
         FontFamily="Segoe UI">
 
     <Window.Resources>
-        <converters:HexToBrushConverter x:Key="HexToBrushConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:StarColorConverter x:Key="StarColorConverter"/>
+        <converters:StarIconConverter x:Key="StarIconConverter"/>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
 
         <!-- Theme Dynamic Resources -->
-        <!--<SolidColorBrush x:Key="ThemePrimaryBrush" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#FFF5F5F5"/>
-        <SolidColorBrush x:Key="ThemeAccentBrush" Color="#FF1976D2"/>-->
-        <SolidColorBrush x:Key="ThemePrimaryBrush" Color="#FF1976D2"/><!-- Buttons, accents -->
-        <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#FFBBDEFB"/><!-- Cards, backgrounds -->
-        <SolidColorBrush x:Key="ThemeAccentBrush" Color="#FF64B5F6"/><!-- Highlights -->
+        <!--
+        <SolidColorBrush x:Key="ThemePrimaryBrush" Color="#FF1976D2"/>
+        <SolidColorBrush x:Key="ThemeSecondaryBrush" Color="#FFBBDEFB"/>
+        <SolidColorBrush x:Key="ThemeAccentBrush" Color="#FF64B5F6"/>-->
 
-        <!--<converters:HexToBrushConverter x:Key="HexToBrushConverter"/>-->
         <Style x:Key="MaterialDesignFloatingActionMiniAccentButton"
    BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
    TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource MaterialDesignAccentBrush}" />
             <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBodyBrush}" />
         </Style>
+
+
     </Window.Resources>
 
+    <materialDesign:DialogHost Background="#EBF3FB"
+        Identifier="RootDialogHost" DialogTheme="Inherit"
+        IsOpen="{Binding IsAddNoteDialogOpen, Mode=TwoWay}">
+
+        <!--<materialDesign:DialogHost.DialogContent>-->
+        <materialDesign:DialogHost.DialogContent>
+            <materialDesign:ColorZone Mode="Standard">
+                <!-- MAIN LAYOUT -->
+                <!-- Centering Container -->
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!-- Card -->
+                    <Border Width="520"
+Padding="20"
+Background="White"
+CornerRadius="12" RenderTransformOrigin="0.5,0.5"
+materialDesign:ElevationAssist.Elevation="Dp2">
+
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="DialogTransform"/>
+                        </Border.RenderTransform>
+
+                        <!-- 👉 Your OLD Layout Grid stays here -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Header -->
+                                <RowDefinition Height="*"/>
+                                <!-- Content -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Actions -->
+                            </Grid.RowDefinitions>
+
+                            <!-- ================= HEADER ================= -->
 
 
-    <Grid Background="{DynamicResource ThemeSecondaryBrush}" Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/><!-- Theme Panel -->
-            <ColumnDefinition/><!-- Notes Panel -->
-        </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="15" 
-        Background="#FFFFFF"
-        Padding="10" Grid.Column="0">
-            <Grid>
-                <StackPanel Orientation="Vertical">
+                            <Grid Grid.Row="0" >
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Add New Note"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center"/>
+                                <!--<TextBlock Text="✖" Grid.Column="1"
+           FontSize="22"
+           Foreground="Black"
+           VerticalAlignment="Center"
+           HorizontalAlignment="Center"/>-->
+                                <!-- CLOSE ICON -->
+
+                                <!--Command="{Binding CloseAddNotePopupCommand}"-->
+                                <Button Grid.Column="1"
+                Width="32"
+                Height="32" 
+                Background="Transparent"
+                BorderThickness="0">
+                                    <!--<Viewbox Width="18" Height="18">-->
+                                    <materialDesign:PackIcon Width="20" Height="20" Kind="Close" Foreground="Black"/>
+                                    <!--</Viewbox>-->
+                                </Button>
+                            </Grid>
+
+                            <!-- ================= CONTENT ================= -->
+                            <Grid Grid.Row="1" Margin="0,16,0,16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <!-- Summary NEW -->
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <!-- Tags NEW -->
+                                </Grid.RowDefinitions>
+
+                                <!-- TITLE + AI BUTTON -->
+                                <TextBox Grid.Row="0"
+                 Text="{Binding NoteTitle, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,0,0,12"
+                 materialDesign:HintAssist.Hint="Title"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                <Grid Grid.Row="1" Margin="0,4,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <!-- spacing -->
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- BUTTON -->
+                                    <Button Grid.Column="0"
+            Content="✨ Generate Title"
+            Command="{Binding GenerateTitleCommand}"
+            Padding="12,6"
+            HorizontalAlignment="Left"/>
+
+                                    <!-- HELPER TEXT -->
+                                    <TextBlock Grid.Column="2"
+               Text="Auto-generate title from content"
+               FontSize="11"
+               Foreground="Gray"
+               VerticalAlignment="Center"/>
+
+                                </Grid>
+
+                                <!-- CONTENT -->
+                                <TextBox Grid.Row="2"
+                 Text="{Binding NoteContent, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,0,0,12" 
+                 materialDesign:HintAssist.Hint="Write your note..."
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+                                <TextBox Grid.Row="3"
+         Text="{Binding NoteSummary}"
+         Margin="0,0,0,12"
+         IsReadOnly="True"
+         materialDesign:HintAssist.Hint="AI Summary"
+         Style="{StaticResource MaterialDesignOutlinedTextBox}" AcceptsReturn="True"
+Height="80"
+TextWrapping="Wrap"/>
+
+                                <TextBox Grid.Row="4"
+         Text="{Binding NoteTags}"
+         Margin="0,0,0,12"
+         IsReadOnly="True"
+         materialDesign:HintAssist.Hint="AI Tags (comma separated)"
+         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+                                <!-- CATEGORY -->
+                                <TextBox Grid.Row="5"
+                 Text="{Binding NoteCategory, UpdateSourceTrigger=PropertyChanged}"
+                 materialDesign:HintAssist.Hint="Category"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+                                <!--Command="{Binding GenerateTitleCommand}"-->
+                                <!-- 🔥 AI BUTTON -->
+
+
+                            </Grid>
+
+                            <!-- ================= ACTIONS ================= -->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- CANCEL -->
+                                <!--<Button Grid.Column="1"
+                Content="Cancel"  Width="110" Height="38"
+                Command="{Binding CloseAddNotePopupCommand}"
+                Margin="0,0,12,0"
+                Style="{StaticResource MaterialDesignOutlinedButton}" />-->
+                                <Button Grid.Column="1"
+        Content="Cancel"
+        Width="110"
+        Height="38"
+        Command="{Binding CloseAddNoteDialogCommand}"
+        Margin="0,0,12,0"
+        Style="{StaticResource MaterialDesignOutlinedButton}" />
+
+                                <!-- SAVE  -->
+                                <Button Grid.Column="2"
+                Content="Save"   
+                Command="{Binding AddNoteCommand}"
+                Foreground="White" 
+                                        Width="110"
+Height="38"
+                Padding="26,10"
+                BorderThickness="0" 
+                                        Style="{StaticResource PurpleGradientButtonStyle}">
+
+
+
+
+
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </materialDesign:ColorZone>
+        </materialDesign:DialogHost.DialogContent>
+        <!-- Your Main Page UI Here -->
+        <Grid Background="#EBF3FB" x:Name="MainGrid" VerticalAlignment="Stretch">
+            <!-- Add button -->
+            <!-- Notes list -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Frame x:Name="MainFrame"/>
+
+            <Border Grid.Column="0" Background="#EBF3FB" Padding="5">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Height="40" Width="40" Background="Transparent" Command="{Binding MenuCommand}"
+            HorizontalAlignment="Center" 
+                            VerticalAlignment="Top"
+            Padding="0" 
+                            BorderThickness="0" 
+            >
+                        <Border Background="#F3E5F5" BorderThickness="2" BorderBrush="#9C27B0"
+            CornerRadius="20"
+            Width="40"
+            Height="40">
+
+                            <materialDesign:PackIcon 
+            Kind="Menu"
+            Width="22"
+            Height="22"
+            Foreground="#673AB7"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"/>
+
+                        </Border>
+                        <!--<Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+
+                                    <Border Background="Transparent"
+                                   
+                            CornerRadius="20"
+                            Width="40"
+                            Height="40"
+                            BorderBrush="#888"
+                            BorderThickness="0" />
+
+                                    -->
+                        <!-- Hamburger icon -->
+                        <!--
+                                    <TextBlock Text="≡"
+                               FontSize="26"
+                               FontWeight="SemiBold"
+                               Foreground="#673AB7"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Margin="0,0,0,0" />
+                                </Grid>
+
+                            </ControlTemplate>
+                        </Button.Template>-->
+                    </Button>
+
+
+
+                    <!-- Settings icon -->
+                    <Button Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+Style="{StaticResource MaterialDesignIconButton}"
+Width="40"
+Height="40"
+ToolTip="Settings">
+                        <materialDesign:PackIcon Kind="Settings"
+                     Width="22"
+                     Height="22"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!--Converter={StaticResource BooleanToVisibilityConverter}}"-->
+            <Grid Grid.Column="1" 
+                  x:Name="LeftSideMenubar" 
+                  Visibility="{Binding IsMenuVisible,Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Background="#F8FBFF" >
+                <ContentControl  x:Name="SidebarContent"
+Grid.Row="0"
+Margin="10" Content="{Binding SidebarVM}"/>
+
+                <!--<StackPanel Visibility="Collapsed" Orientation="Vertical">
                     <WrapPanel Orientation="Vertical"
            Margin="10"
            HorizontalAlignment="Center"
            VerticalAlignment="Top">
 
                         <TextBlock Text="Choose Theme" FontWeight="Bold" FontSize="16" Margin="5"/>
-                        <!-- Main Theme Palettes -->
+                        -->
+                <!-- Main Theme Palettes -->
+                <!--
                         <UniformGrid Columns="3" Margin="5" HorizontalAlignment="Center">
-                            <!-- Ocean Blue -->
+                            -->
+                <!-- Ocean Blue -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="OceanBlue">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FF1976D2"/>
@@ -65,7 +348,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Sunset Glow -->
+                            -->
+                <!-- Sunset Glow -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="SunsetGlow">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FFFF7043"/>
@@ -74,7 +359,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Mint Fresh -->
+                            -->
+                <!-- Mint Fresh -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="MintFresh">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FF4DB6AC"/>
@@ -83,7 +370,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Violet Dream -->
+                            -->
+                <!-- Violet Dream -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="VioletDream">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FF8E24AA"/>
@@ -92,7 +381,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Carbon Dark -->
+                            -->
+                <!-- Carbon Dark -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="CarbonDark">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FF212121"/>
@@ -101,7 +392,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Magenta Pop -->
+                            -->
+                <!-- Magenta Pop -->
+                <!--
                             <Border CornerRadius="8" Margin="5" MouseLeftButtonUp="ThemePalette_Click" Tag="MagentaPop">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Width="25" Height="25" Fill="#FFD81B60"/>
@@ -111,279 +404,521 @@
                             </Border>
                         </UniformGrid>
 
-                        <!-- Custom Multi-Color Palette -->
+                        -->
+                <!-- Custom Multi-Color Palette -->
+                <!--
                         <TextBlock Text="Custom Colors" FontWeight="Bold" FontSize="14" Margin="5,15,5,5"/>
                         <WrapPanel>
-                            <Button Width="25" Height="25" Margin="5" Background="#FFEF5350" BorderBrush="#000" BorderThickness="1" Tag="#FFEF5350" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FFFFA726" BorderBrush="#000" BorderThickness="1" Tag="#FFFFA726" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FF66BB6A" BorderBrush="#000" BorderThickness="1" Tag="#FF66BB6A" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FF42A5F5" BorderBrush="#000" BorderThickness="1" Tag="#FF42A5F5" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FF7E57C2" BorderBrush="#000" BorderThickness="1" Tag="#FF7E57C2" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FFFF80AB" BorderBrush="#000" BorderThickness="1" Tag="#FFFF80AB" Click="ColorButton_Click"/>
-                            <Button Width="25" Height="25" Margin="5" Background="#FF212121" BorderBrush="#000" BorderThickness="1" Tag="#FF212121" Click="ColorButton_Click"/>
+                            <Button Width="25" Height="25" Margin="5" Background="#FFEF5350" BorderBrush="#000" BorderThickness="1" Tag="#FFEF5350" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FFFFA726" BorderBrush="#000" BorderThickness="1" Tag="#FFFFA726" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FF66BB6A" BorderBrush="#000" BorderThickness="1" Tag="#FF66BB6A" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FF42A5F5" BorderBrush="#000" BorderThickness="1" Tag="#FF42A5F5" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FF7E57C2" BorderBrush="#000" BorderThickness="1" Tag="#FF7E57C2" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FFFF80AB" BorderBrush="#000" BorderThickness="1" Tag="#FFFF80AB" />
+                            <Button Width="25" Height="25" Margin="5" Background="#FF212121" BorderBrush="#000" BorderThickness="1" Tag="#FF212121" />
                         </WrapPanel>
 
 
-                        <!-- Color selection -->
-                    <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center">
-                        <Button Width="25" Height="25" Margin="5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        -->
+                <!-- Color selection -->
+                <!--
+                        <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center">
+                            <Button Width="25" Height="25" Margin="5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
 Background="#FF90CAF9" BorderBrush="#7C4DFF" BorderThickness="2"
-Click="ColorButton_Click" Tag="#FF90CAF9"/>
-                        <Button Width="25" Height="25" Margin="5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-Background="#FFF48FB1" BorderBrush="#7C4DFF" BorderThickness="2"
-Click="ColorButton_Click" Tag="#FFF48FB1"/>
-                        <Button Width="25" Height="25" Margin="5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+ Tag="#FF90CAF9"/>
+                            <Button Width="25" Height="25" Margin="5" Background="#FFF48FB1" BorderBrush="#7C4DFF" BorderThickness="2"
+ Tag="#FFF48FB1"/>
+                            <Button Width="25" Height="25" Margin="5"
 Background="#FFFFF59D" BorderBrush="#7C4DFF" BorderThickness="2"
-Click="ColorButton_Click" Tag="#FFFFF59D"/>
-                        <Button Width="25" Height="25" Margin="5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+ Tag="#FFFFF59D"/>
+                            <Button Width="25" Height="25" Margin="5" 
 Background="#FFA5D6A7" BorderBrush="#7C4DFF" BorderThickness="2"
-Click="ColorButton_Click" Tag="#FFA5D6A7"/>
-
-                            
-
+ Tag="#FFA5D6A7"/>
 
                         </StackPanel>
                     </WrapPanel>
+                </StackPanel>-->
+                <StackPanel Orientation="Horizontal" Visibility="Collapsed" Margin="10">
+                    <Button Visibility="Collapsed" Content="All"  Tag="All" Margin="5"/>
+                    <Button Visibility="Collapsed" Content="Personal"  Tag="Personal" Margin="5"/>
+                    <Button Visibility="Collapsed" Content="Work"  Tag="Work" Margin="5"/>
+                    <Button Visibility="Collapsed" Content="Study"  Tag="Study" Margin="5"/>
+
                 </StackPanel>
             </Grid>
-        </Border>
 
-        <!--Background="#F6F8FA"-->
-        <Border Grid.Column="1"  CornerRadius="15" Padding="5">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height ="Auto"/><!-- Header -->
-                    <RowDefinition Height="Auto"/><!-- Add Note Section -->
-                    <RowDefinition Height="Auto"/><!-- Filter Section -->
-                    <RowDefinition Height="*"/><!-- Notes Section -->
-                </Grid.RowDefinitions>
+            <Border Grid.Column="2" Background="#EBF3FB" Margin="20" CornerRadius="15" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" FontSize="18" FontWeight="SemiBold" Margin="5 5 0 10" Foreground="Black">My Notes</TextBlock>
+                        <RowDefinition Height ="Auto"/>
+                        <!-- Header -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Add Note Section -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Filter Section -->
+                        <RowDefinition Height="*"/>
+                        <!-- Notes Section -->
 
-                <!-- Add New Note Section -->
-                <Grid Grid.Row="1" Margin="0 0 0 20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <!--<ColumnDefinition Width="2*"/>-->
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                        <!--<RowDefinition Height="*"/>-->
+                    </Grid.RowDefinitions>
 
-                    <!-- Title -->
-                    <TextBox Grid.Column="0" x:Name="TxtTitle" Margin="5"
-     materialDesign:HintAssist.Hint="Title" BorderBrush="{DynamicResource ThemeAccentBrush}"
-     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-
-                    <!-- Content -->
-                    <TextBox Grid.Column="1" x:Name="TxtContent" Margin="5"
-     materialDesign:HintAssist.Hint="Content" BorderBrush="{DynamicResource ThemeAccentBrush}"
-     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-
-                    <!-- Category -->
-                    <TextBox Grid.Column="2" x:Name="TxtCategory" Margin="5"
-     materialDesign:HintAssist.Hint="Category" BorderBrush="{DynamicResource ThemeAccentBrush}"
-     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                    <views:HeaderView DataContext="{Binding}"  Grid.Row="0"/>
 
 
+                    <Grid Grid.Row="0" Visibility="Collapsed"
+      Height="50"
+      Background="White"
+      Margin="10">
 
-                    <!-- Add button -->
-                    <Button Visibility="Collapsed" Grid.Column="3" x:Name="BtnAdd" Margin="5"
-    Content="Add Note"
-    Style="{StaticResource MaterialDesignOutlinedDarkButton}"
-    Click="BtnAdd_Click"/>
-                </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0" Text="My Notes" FontSize="18" FontWeight="SemiBold"  Foreground="Black"></TextBlock>
+
+                        <!-- Search -->
+                        <TextBox Grid.Column="1"
+             Width="220"
+             Height="32"
+             Margin="0,0,15,0"
+             VerticalAlignment="Center"
+             materialDesign:HintAssist.Hint="Search..."
+             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
 
 
-                <!-- Filter Section -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal"
+
+                    <!--<materialDesign:DialogHost Identifier="AddNoteDialog" IsOpen="{Binding IsAddNoteDialogOpen, Mode=TwoWay}">-->
+                    <!-- ADD NOTE DIALOG -->
+
+                    <!--</materialDesign:DialogHost>-->
+
+                    <!-- Filter Section -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Margin="0,10,0,20"
             Background="Transparent" >
 
-                    <!-- Define a ToggleButton Style for all filter buttons -->
-                    <!-- 🔹 Add this Resources section ABOVE your buttons -->
-                 
-                    <ToggleButton x:Name="BtnAll"
-                  Content="All"
-                  Style="{StaticResource MaterialDesignOutlinedButton}"
+                        <!-- Define a ToggleButton Style for all filter buttons -->
+                        <!-- 🔹 Add this Resources section ABOVE your buttons -->
+
+                        <RadioButton  x:Name="BtnAll"
+                  Content="All" IsChecked="{Binding SelectedFilter, Mode=TwoWay,
+                          Converter={StaticResource EnumToBooleanConverter}, 
+                          ConverterParameter=All}"
+                                      Style="{StaticResource FilterToggleStyle}"
                   MinWidth="100"
-                  Padding="0,0"
-                  FontSize="14"
+                  Margin="5,0"    GroupName="MenuGroup"              Tag="{x:Static enums:NoteFilterType.All}"
+
+                                    Command="{Binding FilterCommand}"
+                  CommandParameter="{x:Static enums:NoteFilterType.All}"/>
+
+                        <RadioButton  x:Name="BtnToday"
+                  Content="Today" IsChecked="{Binding SelectedFilter, Mode=TwoWay,
+                          Converter={StaticResource EnumToBooleanConverter}, 
+                          ConverterParameter=Today}"
+Tag="{x:Static enums:NoteFilterType.Today}"
+                  Style="{StaticResource FilterToggleStyle}"
+                  MinWidth="100"
                   Margin="5,0"
-                  IsChecked="True"
-                  Foreground="Gray"
-                  BorderThickness="0"
-                  Checked="FilterButton_Checked"
-                  Unchecked="FilterButton_Unchecked"/>
-                    
-                    <ToggleButton x:Name="BtnToday"
-                  Content="Today"
-                  Style="{StaticResource MaterialDesignOutlinedButton}"
+                                      GroupName="MenuGroup"
+                  CommandParameter="{x:Static enums:NoteFilterType.Today}"
+                                        />
+
+                        <RadioButton  x:Name="BtnThisWeek"
+                  Content="This Week" GroupName="MenuGroup"
+                    Tag="{x:Static enums:NoteFilterType.ThisWeek}"                
+Command="{Binding FilterCommand}" IsChecked="{Binding SelectedFilter,Mode=TwoWay, 
+                          Converter={StaticResource EnumToBooleanConverter}, 
+                          ConverterParameter=ThisWeek}"                     
+CommandParameter="{x:Static enums:NoteFilterType.ThisWeek}"
+                  Style="{StaticResource FilterToggleStyle}"
                   MinWidth="100"
-                  Padding="0,0"
-                  FontSize="14"
-                  Margin="5,0"
-                  Foreground="Gray" BorderThickness="0" Checked="FilterButton_Checked" />
+                  Margin="5,0"/>
 
-                    <ToggleButton x:Name="BtnThisWeek"
-                  Content="This Week"
-                  Style="{StaticResource MaterialDesignOutlinedButton}"
-                  MinWidth="100"
-                  Padding="0,0"
-                  FontSize="14"
-                  Margin="5,0" Foreground="Gray" BorderThickness="0" Checked="FilterButton_Checked"/>
+                        <RadioButton  x:Name="BtnThisMonth"
+                  Content="This Month" GroupName="MenuGroup"
+                  Style="{StaticResource FilterToggleStyle}"
+                  MinWidth="110" IsChecked="{Binding SelectedFilter, Mode=TwoWay,
+                          Converter={StaticResource EnumToBooleanConverter}, 
+                          ConverterParameter=ThisMonth}"
+                  Tag="{x:Static enums:NoteFilterType.ThisMonth}"                
+                  Margin="5,0" 
+                   CommandParameter="{x:Static enums:NoteFilterType.ThisMonth}"
+                   />
 
-                    <ToggleButton x:Name="BtnThisMonth"
-                  Content="This Month"
-                  Style="{StaticResource MaterialDesignOutlinedButton}"
-                  MinWidth="110"
-                  Padding="0,0"
-                  FontSize="14"
-                  Margin="5,0" Foreground="Gray" BorderThickness="0" Checked="FilterButton_Checked"/>
-                </StackPanel>
+                        <!--Text="{Binding RemainingAiText}"-->
+                        <TextBlock
+    
+    FontSize="12"
+    Foreground="Gray"/>
+                    </StackPanel>
 
-                <StackPanel Grid.Row="2" HorizontalAlignment="Right">
+                    <!--<StackPanel Visibility="Collapsed" Grid.Row="2" HorizontalAlignment="Right">
+                        -->
                     <!-- Calendar control -->
-                    <DatePicker 
+                    <!--
+                        <DatePicker 
     SelectedDate="{Binding SelectedDate}" 
     Width="200"
     Margin="10"
     Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
     materialDesign:HintAssist.Hint="Select Date" />
-                </StackPanel>
+                    </StackPanel>-->
 
-                <!-- ADD NOTE CARD -->
+                    <!-- ADD NOTE CARD -->
+                    <Grid x:Name="NoteSection"  Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <!--<RowDefinition Height ="Auto"/>-->
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                <Grid x:Name="NoteSection" Grid.Row="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height ="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                        <!--<Button x:Name="AddNoteBtn" Grid.Row="0" Command="{Binding OpenAddNotePopupCommand}"
+materialDesign:ButtonAssist.CornerRadius="5"
+materialDesign:ElevationAssist.Elevation="Dp3"
+Background="White"
+Foreground="#444746" 
+Height="40" Width="120"
+Margin="16,10" BorderBrush="#444746"
+HorizontalAlignment="Left" BorderThickness="0"
+Padding="0">
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <materialDesign:PackIcon Kind="NotePlusOutline" Width="24" Height="24" Margin="0,0,5,0"/>
+                                <TextBlock Text="Add Note" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
 
-                    <materialDesign:Card Margin="16" Grid.Row="0"
-           MinWidth="260"
-           Width="200"
-           MaxWidth="340"
-                                             MinHeight="150"
-           UniformCornerRadius="12"
-           
-                                             Background="{DynamicResource ThemeSecondaryBrush}"
-                         BorderBrush="LightGray"
-                         BorderThickness="1"
-                         Padding="10"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-           >
-                        <materialDesign:Card.Effect>
-                            <DropShadowEffect BlurRadius="8" Opacity="0.2" Direction="270" ShadowDepth="4"/>
-                        </materialDesign:Card.Effect>
-                        <!--Card content-->
-                        <Button Background="Transparent"  BorderThickness="0"
-HorizontalAlignment="Center" VerticalAlignment="Center"
 
-Click="BtnAdd_Click">
-                            <materialDesign:PackIcon Kind="Plus" Width="35" Height="30" Foreground="Gray"/>
-                        </Button> 
-                    </materialDesign:Card>
-                    <!-- Notes Section with Cards -->
-                    <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <!-- Responsive card grid using WrapPanel -->
-                        <WrapPanel  Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                        </Button>-->
 
-                            <!--Background="{Binding CardBackground, Converter={StaticResource HexToBrushConverter}}"-->
+                        <!--ChnageColor testing Code-->
+                        <StackPanel Visibility="Collapsed">
+                            <Button  Grid.Row="1" Content="Change Color"
+            Command="{Binding ChangeColorCommand}"
+            Width="140"
+            Margin="10"/>
+                            <materialDesign:Card
+        Width="100"
+        Height="20"
+        Margin="20"
+        Background="{Binding CurrentNotetestingColor}" />
+                        </StackPanel>
+                        <Grid Grid.Row="0">
+                            <!-- Notes Section -->
+                            <ScrollViewer  VerticalScrollBarVisibility="Auto" Visibility="{Binding HasNotes,
+                     Converter={StaticResource BooleanToVisibilityConverter}}" 
+                     Style="{StaticResource ModernScrollViewerStyle}">
 
-                            <ItemsControl x:Name="LstNotes" ItemsSource="{Binding Notes}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <materialDesign:Card Margin="16"
-              MinWidth="260"
-              MaxWidth="340"
-              Padding="18"
-              Background="{DynamicResource ThemeSecondaryBrush}"
-              UniformCornerRadius="16">
-                                            <materialDesign:Card.Effect>
-                                                <DropShadowEffect BlurRadius="8" Opacity="0.2" Direction="270" ShadowDepth="4"/>
-                                            </materialDesign:Card.Effect>
-                                            <!-- Card content -->
-                                            <StackPanel>
-                                                <!-- Category as a chip -->
-                                                <Border  Background="#FFF9C4"
-     CornerRadius="12"
-     Padding="4,1"
-     Margin="0,0,0,8"
-     HorizontalAlignment="Left" Visibility="Collapsed">
-                                                    <!--Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}"-->
-                                                    <!-->-->
-                                                    <TextBlock Text="{Binding Category}" Foreground="#616161" FontWeight="SemiBold" FontSize="13"/>
-                                                </Border>
+                                <!-- Responsive card grid using WrapPanel -->
+                                <WrapPanel Background="Transparent" IsHitTestVisible="True" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                    <!--Background="{Binding CardBackground}"-->
+                                    <!--Background="{Binding CardBackground, Converter={StaticResource HexToBrushConverter}}"-->
+                                    <!--old color of not background #EBF3FB-->
+                                    <ItemsControl x:Name="LstNotes" Background="Transparent"  ItemsSource="{Binding Notes}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <materialDesign:Card Margin="16" Width="300"
+        Height="220"
+MinWidth="260"
+MaxWidth="340"
+Padding="18" 
+Background="{Binding DataContext.CurrentNoteColor,RelativeSource={RelativeSource AncestorType=Window}}"  UniformCornerRadius="16">
+                                                    <materialDesign:Card.Effect>
+                                                        <DropShadowEffect BlurRadius="20" Opacity="0.6"  Direction="270"
+                                                                      ShadowDepth="0" Color="#7E57C2"/>
+                                                    </materialDesign:Card.Effect>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <Button Grid.Row="0" Background="Transparent" 
+                                                Style="{StaticResource CardClickButton}"
+      MinWidth="260"
+  MaxWidth="340"
+    Padding="0"
+    HorizontalAlignment="Stretch"  HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+    Command="{Binding DataContext.OpenNoteCommand,RelativeSource={RelativeSource AncestorType=Window}}"
+    CommandParameter="{Binding}">
 
-                                                <!-- Title row with actions -->
-                                                <DockPanel Margin="0,0,0,2">
-                                                    <TextBlock Text="{Binding Title}"
-          FontWeight="Bold"
-          FontSize="17"
-          DockPanel.Dock="Left"
-          VerticalAlignment="Center"/>
-                                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="8,0,0,0">
-                                                        <Button Style="{StaticResource MaterialDesignToolButton}"
-         ToolTip="Edit"
-         Click="EditNote_Click"
-         Tag="{Binding}">
-                                                            <materialDesign:PackIcon Kind="Pencil" Width="16" Height="16"/>
+
+
+
+
+                                                            <!--Card Content-->
+
+                                                            <Grid Margin="16" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <!-- Category -->
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <!-- Title -->
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <!-- Content -->
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <!-- Separator -->
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <!-- Actions -->
+                                                                </Grid.RowDefinitions>
+                                                                <!--<Border Background="Transparent"
+CornerRadius="12" Grid.Row="0"
+Padding="4,1"
+Margin="0,0,0,8"
+HorizontalAlignment="Left"
+Visibility="Collapsed">-->
+                                                                <!--Category-->
+                                                                <TextBlock Visibility="Collapsed"  Grid.Row="0" Text="{Binding Category}" Foreground="#616161" FontWeight="SemiBold" FontSize="13"/>
+                                                                <!-- TITLE -->
+                                                                <DockPanel Grid.Row="1" Margin="0,0,0,2">
+                                                                    <TextBlock Text="{Binding Title}"
+FontWeight="Bold"
+FontSize="17"
+DockPanel.Dock="Left"
+VerticalAlignment="Center"/>
+                                                                </DockPanel>
+
+                                                                <Separator Grid.Row="2" Margin="0,4,0,8" Opacity="0.15"/>
+                                                                <!-- CONTENT -->
+                                                                <TextBlock Grid.Row="3" Text="{Binding Content}"
+TextWrapping="Wrap"
+FontSize="15"
+Foreground="#222"
+Margin="0,0,0,0"
+MaxHeight="90" 
+TextTrimming="CharacterEllipsis"/>
+
+                                                                <!--</Border>-->
+                                                            </Grid>
+
+
+                                                            <!--Date-->
+
                                                         </Button>
-                                                        <Button Style="{StaticResource MaterialDesignToolButton}"
-         ToolTip="Delete"
-         Click="DeleteNote_Click"
-         Tag="{Binding}">
-                                                            <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
-                                                        </Button>
-                                                    </StackPanel>
-                                                </DockPanel>
+                                                        <Grid Grid.Row="1" Margin="0,10,0,0"
+      VerticalAlignment="Center">
 
-                                                <!-- Divider -->
-                                                <Separator Margin="0,4,0,8" Opacity="0.15"/>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <!-- Checkbox -->
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <!-- Star -->
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <!-- Important -->
+                                                                <ColumnDefinition Width="*"/>
+                                                                <!-- Spacer -->
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <!-- Time -->
+                                                            </Grid.ColumnDefinitions>
 
-                                                <!-- Content -->
-                                                <TextBlock Text="{Binding Content}"
-        TextWrapping="Wrap"
-        FontSize="15"
-        Foreground="#222"
-        Margin="0,0,0,4"
-        MaxHeight="90"
-        TextTrimming="CharacterEllipsis"/>
-                                                <!-- Date/time at bottom -->
-                                                <DockPanel Margin="0,10,0,0">
-                                                    <materialDesign:PackIcon Kind="Clock" Width="14" Height="14" DockPanel.Dock="Left" Margin="0,0,6,0" Foreground="#757575"/>
-                                                    <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:hh:mm tt, ddd d MMM}'}"
-          Foreground="#757575"
-          FontSize="12"
-          VerticalAlignment="Center"/>
-                                                </DockPanel>
-                                            </StackPanel>
-                                        </materialDesign:Card>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                                            <!-- ☑ Select -->
+                                                            <CheckBox Grid.Column="0"
+              IsChecked="{Binding IsSelected}"
+              VerticalAlignment="Center" 
+              Margin="0,0,3,0"/>
+
+                                                            <!-- ⭐ Star -->
+                                                            <ToggleButton Grid.Column="1"
+                  Style="{StaticResource MaterialDesignFlatToggleButton}"
+                  IsChecked="{Binding IsStarred}"
+                  Command="{Binding ToggleStarCommand}" 
+                  Width="30"
+                  Height="30"
+                  Padding="0"
+                  Margin="0,0,3,0">
+                                                                <materialDesign:PackIcon Kind="{Binding IsStarred,
+                              Converter={StaticResource StarIconConverter}}"
+                                 Foreground="{Binding IsStarred,
+                              Converter={StaticResource StarColorConverter}}" />
+                                                            </ToggleButton>
+
+                                                            <!-- » Important -->
+                                                            <ToggleButton Grid.Column="2"
+                                     Style="{StaticResource MaterialDesignFlatToggleButton}"
+
+                  IsChecked="{Binding IsImportant}"
+                  Command="{Binding ToggleImportantCommand}"
+                  Width="30"
+                  Height="30"
+                  Padding="0"
+                  Margin="0,0,3,0">
+                                                                <!--<ToggleButton.Style>
+                                                                <Style TargetType="ToggleButton">
+
+                                                                    -->
+                                                                <!-- Default: Not Important -->
+                                                                <!--
+                                                                    <Setter Property="ToolTip" Value="Mark as Important"/>
+                                                                    <Setter Property="Foreground" Value="Gray"/>
+
+                                                                    <Style.Triggers>
+
+                                                                        -->
+                                                                <!-- Important -->
+                                                                <!--
+                                                                        <Trigger Property="IsChecked" Value="True">
+                                                                            <Setter Property="Foreground" Value="OrangeRed"/>
+                                                                            <Setter Property="ToolTip" Value="Marked as Important"/>
+                                                                        </Trigger>
+
+                                                                        -->
+                                                                <!-- Hover -->
+                                                                <!--
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Foreground" Value="DarkOrange"/>
+                                                                        </Trigger>
+
+                                                                    </Style.Triggers>
+                                                                </Style>
+
+                                                            </ToggleButton.Style>
+
+                                                            <TextBlock FontFamily="Segoe Fluent Icons"
+               FontSize="20"
+               Text=""  
+               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"/>-->
+                                                                <materialDesign:PackIcon Kind="{Binding IsStarred,
+                              Converter={StaticResource StarIconConverter}}"
+                             Width="20"
+                             Height="20">
+                                                                    <materialDesign:PackIcon.Style>
+                                                                        <Style TargetType="materialDesign:PackIcon">
+                                                                            <Setter Property="Foreground" Value="#B0B0B0"/>
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding IsImportant}" Value="True">
+                                                                                    <Setter Property="Foreground" Value="#FFC107"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </materialDesign:PackIcon.Style>
+                                                                </materialDesign:PackIcon>
+                                                            </ToggleButton>
+
+                                                            <!-- 🕒 Time -->
+                                                            <StackPanel Grid.Column="4"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
+                                                                <!--<materialDesign:PackIcon Kind="ClockOutline"
+                                 Width="14"
+                                 Height="14"
+                                 Margin="0,0,4,0"
+                                 Foreground="#757575"/>-->
+
+                                                                <TextBlock Text="{Binding CreatedAt,
+                  StringFormat='{}{0:hh:mm tt, ddd d MMM}'}"
+                   Foreground="#757575"
+                   FontSize="12"/>
+                                                            </StackPanel>
+
+                                                        </Grid>
+                                                    </Grid>
+                                                </materialDesign:Card>
+                                                <!--Card Wrapper: CLICKABLE CARD-->
+
+                                                <!--</Border>-->
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </WrapPanel>
+                            </ScrollViewer>
+                            <!-- Empty message -->
+                            <Grid  HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+ Visibility="{Binding HasNotes,
+Converter={StaticResource InverseBoolConverter}}"      MaxWidth="400">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Icon -->
+                                <!--<TextBlock Grid.Row="0"
+               Text="📝"
+               FontSize="50"
+               Foreground="#9C27B0"
+               HorizontalAlignment="Center"/>-->
+                                <!-- Icon -->
+                                <materialDesign:PackIcon Grid.Row="0"
+                             Kind="NoteOutline"
+                             Width="60"
+                             Height="60"
+                             Foreground="#9C27B0"
+                             HorizontalAlignment="Center"/>
+
+                                <!-- Title -->
+                                <TextBlock Grid.Row="2"
+               Text="No notes yet"
+               FontSize="20"
+               Foreground="#555555"
+               FontWeight="SemiBold"
+               HorizontalAlignment="Center"/>
+
+                                <!-- Subtitle -->
+                                <TextBlock Grid.Row="4"
+               Text="Create your first note"
+               FontSize="14"
+               Foreground="Gray"
+               HorizontalAlignment="Center"/>
+
+                            </Grid>
+                        </Grid>
+
+                        <!--<TextBlock Grid.Row="0" Text="{Binding HasNotes}" FontSize="20"/>-->
+
+                        <!-- NOTES LOADER Progressing Ring -->
+                        <Grid Grid.Row="1"  Visibility="{Binding IsLoadingNotes,
+               Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                            <StackPanel VerticalAlignment="Center" Width="100"
+                    HorizontalAlignment="Center" Background="Transparent">
 
 
-                        </WrapPanel>
+                                <ProgressBar Margin="0,5"
+                IsIndeterminate="True" Value="0" Maximum="100" IsHitTestVisible="False"
+                Foreground="#5B6EF5"
+                 Background="#E5E7EB"/>
 
-                    </ScrollViewer>
+                                <TextBlock Text="Loading notes..."
+                       FontSize="13" Foreground="#6B7280"
+                       
+                       HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                        </Grid>
+
+
+                    </Grid>
+
+
+                    <!-- Everything else -->
+
+                    <StackPanel x:Name="ToastContainer"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Margin="20"
+                Width="300"
+                Background="Transparent"/>
+
                 </Grid>
 
-               
+            </Border>
 
-               
-               
+        </Grid>
+        <!--</materialDesign:DialogHost.DialogContent>-->
 
-            </Grid>
-        </Border>
-    </Grid>
+    </materialDesign:DialogHost>
 </Window>
+

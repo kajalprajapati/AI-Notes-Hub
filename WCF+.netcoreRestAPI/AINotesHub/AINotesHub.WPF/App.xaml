@@ -1,44 +1,64 @@
 ﻿<Application x:Class="AINotesHub.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AINotesHub.WPF" 
+             xmlns:local="clr-namespace:AINotesHub.WPF"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-
-             StartupUri="MainWindow.xaml">
+             xmlns:vm="clr-namespace:AINotesHub.WPF.ViewModels"
+             xmlns:views="clr-namespace:AINotesHub.WPF.Views"
+             >
     <Application.Resources>
-        
+
+
+
         <ResourceDictionary>
+
+            <!-- FIX: Move DataTemplate inside the ResourceDictionary, and use correct x:Type syntax -->
+            <DataTemplate DataType="{x:Type vm:SidebarViewModel}">
+                <views:SidebarView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ProfileImageViewModel}">
+                <views:ProfileImageView/>
+            </DataTemplate>
+
+
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-                
-            </ResourceDictionary.MergedDictionaries>
-            <!--<ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
 
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.LightTheme.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                --><!--<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />-->
-                <!-- Material Design Colors -->
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                --><!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" />-->
+                <!--<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="Lime" />-->
+             
 
-                <!-- Material Design Styles --><!--
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
-                <!-- Material Design resource dictionaries -->
+                <!-- Material Design Theme -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml"/>
+                <!-- NEW WAY -->
+                <materialDesign:BundledTheme 
+BaseTheme="Light"
+PrimaryColor="DeepPurple"
+SecondaryColor="Lime" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />-->
+
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                --><!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />--><!--
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                --><!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />--><!--
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />-->
-                <!--<ResourceDictionary Source="Themes/DarkTheme.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />--><!--
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PasswordBox.xaml" />-->
 
-            </ResourceDictionary.MergedDictionaries>-->
+                <!-- REQUIRED colors -->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>-->
+
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.ScrollBar.xaml"/>-->
+
+                <ResourceDictionary Source="/Styles/Controls/Buttons.xaml"/>
+                <ResourceDictionary Source="/Styles/Controls/CheckBoxes.xaml"/>
+                <ResourceDictionary Source="/Styles/Controls/ListViews.xaml" />
+                <ResourceDictionary Source="/Styles/Controls/ProgressBar.xaml" />
+                <ResourceDictionary Source="/Styles/Controls/ScrollViewers.xaml" />
+                <ResourceDictionary Source="/Styles/Controls/ComboBox.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

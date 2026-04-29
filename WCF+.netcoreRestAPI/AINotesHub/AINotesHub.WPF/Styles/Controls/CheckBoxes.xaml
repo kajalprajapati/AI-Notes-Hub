@@ -1,0 +1,65 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Simple reusable checkbox style that always shows box + tick -->
+    <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Box -->
+                        <Border x:Name="Box"
+                    Width="18" Height="18"
+                    CornerRadius="2"
+                    BorderThickness="1.5"
+                    BorderBrush="#FF333333"
+                    Background="White"
+                    VerticalAlignment="Center">
+                            <!-- Tick path -->
+                            <Path x:Name="Tick"
+                    Data="M2,9 L6,13 L15,3"
+                    Stroke="Transparent"
+                    StrokeThickness="2"
+                    StrokeEndLineCap="Square"
+                    StrokeStartLineCap="Square"
+                    Stretch="None"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+                        </Border>
+
+                        <!-- Content -->
+                        <ContentPresenter Margin="8,0,0,0"
+                              VerticalAlignment="Center"
+                              RecognizesAccessKey="True" />
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Checked state -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Box" Property="Background" Value="#FF1E88E5" />
+                            <Setter TargetName="Box" Property="BorderBrush" Value="#FF1E88E5" />
+                            <Setter TargetName="Tick" Property="Stroke" Value="White" />
+                        </Trigger>
+
+                        <!-- Indeterminate -->
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="Tick" Property="Stroke" Value="#FF1E88E5" />
+                            <Setter TargetName="Tick" Property="StrokeThickness" Value="2" />
+                        </Trigger>
+
+                        <!-- Disabled state -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Box" Property="Opacity" Value="0.5" />
+                            <Setter Property="Foreground" Value="#FF777777" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

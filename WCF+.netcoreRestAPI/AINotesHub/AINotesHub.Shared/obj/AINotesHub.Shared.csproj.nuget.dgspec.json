@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj": {}
+    "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj": {
+    "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
         "projectName": "AINotesHub.Shared",
-        "projectPath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
+        "projectPath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
         "packagesPath": "C:\\Users\\praja\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\obj\\",
+        "outputPath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -73,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

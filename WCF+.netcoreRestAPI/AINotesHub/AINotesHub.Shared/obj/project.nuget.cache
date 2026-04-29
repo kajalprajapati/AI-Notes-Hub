@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "U8ozZg8RJmw=",
+  "dgSpecHash": "fvlz8ZL/oVE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\Practice\\Full Stack Project\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
+  "projectFilePath": "C:\\Users\\praja\\OneDrive\\Desktop\\Kajal\\GitHub\\DotNetPortfolio\\WCF+.netcoreRestAPI\\AINotesHub\\AINotesHub.Shared\\AINotesHub.Shared.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\praja\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
     "C:\\Users\\praja\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\praja\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\praja\\.nuget\\packages\\microsoft.build.framework\\17.8.3\\microsoft.build.framework.17.8.3.nupkg.sha512",

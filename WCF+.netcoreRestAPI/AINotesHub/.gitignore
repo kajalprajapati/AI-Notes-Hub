@@ -1,0 +1,15 @@
+﻿# Ignore config files with secrets
+#Git, please IGNORE these files. Don’t upload them.
+appsettings.jsons
+appsettings.*.json
+OpenAIConfig.cs
+Secrets.cs
+
+# Ignore bin/obj
+bin/
+obj/
+
+# Ignore user files
+*.user
+*.suo
+.vs/

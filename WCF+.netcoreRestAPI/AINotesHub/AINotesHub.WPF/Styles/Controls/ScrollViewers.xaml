@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ScrollViewer Style -->
+    <Style x:Key="ModernScrollViewerStyle" TargetType="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+
+    <!-- These apply globally (recommended) -->
+    <Style TargetType="ScrollBar">
+        <Setter Property="Width" Value="5"/>
+        <!--<Setter Property="Background" Value="#9C27B0"/>-->
+    </Style>
+
+    <Style TargetType="Thumb">
+        <Setter Property="Background" Value="#9C27B0"/>
+        <!--<Setter Property="Background" Value="#FFF8BBD0"/>-->
+    </Style>
+    
+    <!--<Style x:Key="ModernScrollViewerStyle" TargetType="ScrollViewer">
+
+        --><!-- Default Properties --><!--
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+
+        --><!-- Combine Internal Styles --><!--
+        <Setter Property="Resources">
+            <Setter.Value>
+                <ResourceDictionary>
+
+                    --><!-- ScrollBar --><!--
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Width" Value="10"/>
+                        <Setter Property="Background" Value="#6C40B9"/>
+                    </Style>
+
+                    --><!-- Thumb --><!--
+                    <Style TargetType="Thumb">
+                        <Setter Property="Background" Value="#F3E5F5"/>
+                    </Style>
+
+                </ResourceDictionary>
+            </Setter.Value>
+        </Setter>
+
+    </Style>-->
+
+</ResourceDictionary>

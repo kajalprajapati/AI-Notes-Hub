@@ -1,0 +1,14 @@
+2026-04-24 16:29:02.237 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 16:29:56.354 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 16:30:41.209 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 16:38:30.739 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 16:40:51.698 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 17:09:13.125 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 18:00:19.916 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 18:01:16.423 +05:30 [FTL] ❌ Application start-up failed in {Environment}!
+2026-04-24 18:59:37.492 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 18:59:48.180 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 18:59:57.148 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 19:00:20.065 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 20:11:40.422 +05:30 [INF] Login attempt: Username = k@gmail.com
+2026-04-24 20:11:52.513 +05:30 [INF] Login attempt: Username = k@gmail.com

@@ -1,0 +1,312 @@
+﻿<UserControl x:Class="AINotesHub.WPF.UserControls.Dialogs.NoteDetailsDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:converters="clr-namespace:AINotesHub.WPF.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             mc:Ignorable="d" MinWidth="400" MinHeight="500"
+             d:DesignHeight="450" d:DesignWidth="800" Padding="24">
+
+    <UserControl.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <!--Background="{Binding mainVm.CurrentNoteColor,RelativeSource={RelativeSource AncestorType=UserControl}}ibilityConverter x:Key="BoolToVisibilityConverter"/>-->
+
+
+    <!--Background="{DynamicResource MaterialDesignPaper}"-->
+    <Border CornerRadius="12"
+               Background="Transparent"
+            Effect="{DynamicResource MaterialDesignElevation4Shadow}">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- SUMMARY -->
+            <ScrollViewer Grid.Row="4" Margin="10">
+
+                <TextBlock
+            Text="{Binding Summary}"
+            TextWrapping="Wrap"
+            FontSize="14"/>
+
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="4" VerticalAlignment="Center">
+                <!--   Spinner -->
+                <ProgressBar
+Width="120"
+Height="6"
+IsIndeterminate="True"
+Visibility="{Binding LoadingVisibility}"/>
+
+                <!-- Text -->
+                <!-- Result -->
+                <TextBlock
+        Text="{Binding Summary}"
+        TextWrapping="Wrap"
+        Margin="0,10"/>
+            </StackPanel>
+
+            <Border Grid.Row="0"
+Background="#EBF3FB"
+CornerRadius="12"
+BorderBrush="#CCC"
+BorderThickness="0.5"
+Padding="8,6"
+Margin="0,8,0,0"
+HorizontalAlignment="Stretch"
+VerticalAlignment="Center">
+                <!--<DockPanel Margin="0 0 0 16"  >-->
+                <Grid >
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- LEFT: TITLE (View/Edit) -->
+                    <Grid Grid.Column="0" Margin="0,0,5,0"  >
+                        <!-- VIEW MODE -->
+                        <TextBlock Text="{Binding Note.Title}" 
+  FontSize="26" Margin="8,0,0,0"
+  FontWeight="Bold" Name="TxtTitle"
+  VerticalAlignment="Center" Visibility="{Binding Note.IsEditing, Converter={StaticResource InverseBoolConverter}}" 
+  />
+                        <!-- EDIT MODE -->
+                        <TextBox Text="{Binding Note.EditableTitle, UpdateSourceTrigger=PropertyChanged}"
+FontSize="26" Height="36"
+FontWeight="Bold" Margin="8,0,0,0" VerticalAlignment="Center"
+Visibility="{Binding Note.IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" >
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Note.IsEditing}" Value="True">
+                                            <Setter Property="FocusManager.FocusedElement"
+                            Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+
+
+                    <!-- RIGHT: ACTION BUTTONS -->
+
+                    <Grid Grid.Column="1" Background="Transparent" HorizontalAlignment="Right">
+                        <StackPanel  Orientation="Horizontal" Visibility="{Binding Note.IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <!-- SAVE -->
+                            <Button Command="{Binding Note.SaveCommand}" 
+                Height="36"
+                Background="#673AB7"
+                Foreground="White"
+                ToolTip="Save"
+                Visibility="{Binding IsEditing,
+                Converter={StaticResource BoolToVisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="ContentSave"/>
+                            </Button>
+
+                            <!-- CANCEL -->
+                            <Button Command="{Binding Note.CancelCommand}" 
+                Height="36"
+                Background="#673AB7"
+                Foreground="White"
+                ToolTip="Save"
+                Visibility="{Binding IsEditing,
+                Converter={StaticResource BoolToVisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Close"/>
+                            </Button>
+
+                        </StackPanel>
+
+                        <!-- MENU (View mode) -->
+                        <Grid Visibility="{Binding Note.IsEditing,
+        Converter={StaticResource InverseBoolConverter}}">
+
+                            <materialDesign:PopupBox DockPanel.Dock="Right"
+StaysOpen="False"
+PlacementMode="BottomAndAlignRightEdges" VerticalAlignment="Center" HorizontalAlignment="Right">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon  VerticalAlignment="Center" Kind="DotsVertical" Width="28" Height="28" />
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <StackPanel Margin="12" Width="180">
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" Visibility="{Binding Note.IsEditing, Converter={StaticResource InverseBoolConverter}}"  HorizontalAlignment="Left"  Command="{Binding Note.EditCommand}">
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Pencil" Margin="0 0 12 0"/>
+                                            <TextBlock Text="Edit"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  HorizontalAlignment="Left" Command="{Binding Note.MoveToTrashCommand}">
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Delete" Margin="0 0 12 0"/>
+                                            <TextBlock Text="Move to Trash"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left"  Command="{Binding Note.ArchiveCommand}">
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Archive" Margin="0 0 12 0"/>
+                                            <TextBlock Text="Archive"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Separator Margin="8 8"/>
+                                    <!--<Button Style="{StaticResource MaterialDesignFlatButton}" Click="DeleteNote_Click" HorizontalAlignment="Left" Command="{Binding DeleteForeverCommand}">-->
+
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Command="{Binding DeleteForeverCommand}">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="DeleteForever" Margin="0 0 12 0"/>
+                                            <TextBlock Text="Delete Forever"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+
+                        </Grid>
+                    </Grid>
+
+
+                </Grid>
+
+                <!--</DockPanel>-->
+            </Border>
+
+
+            <!-- Content -->
+            <ScrollViewer Padding="8,6" Background="Transparent" Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="350">
+                <Border CornerRadius="12" Padding="8,6"
+             Background="#EBF3FB" BorderBrush="#CCC" HorizontalAlignment="Stretch" 
+BorderThickness="0.5" Margin="0,8,0,0"
+          Effect="{DynamicResource MaterialDesignElevation4Shadow}">
+                    <Grid   Background="Transparent">
+
+                        <!-- VIEW MODE -->
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Stretch" Text="{Binding Note.Content}" 
+FontSize="17" Visibility="{Binding Note.IsEditing,
+              Converter={StaticResource InverseBoolConverter}}"
+TextWrapping="Wrap"  MaxWidth="400"
+Foreground="{DynamicResource MaterialDesignBody}"/>
+
+
+                        <!-- EDIT MODE -->
+                        <TextBox Text="{Binding Note.EditableContent, UpdateSourceTrigger=PropertyChanged}"
+  AcceptsReturn="True"
+  TextWrapping="Wrap" 
+  FontSize="17" MinHeight="150"
+  Visibility="{Binding Note.IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </Grid>
+                </Border>
+               
+
+            </ScrollViewer>
+
+
+            <Grid Grid.Row="2" Margin="0,8,0,0" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--//--> <!--#673AB7-->
+                <Button Grid.Column="0" MinWidth="160" Height="48"
+Content="Quick Summary ✨" Style="{StaticResource PurpleGradientButtonStyle}" Command="{Binding SummarizeCommand}" />
+
+                <Button Grid.Column="1" Height="48"
+ MinWidth="160" Content="AI Summary ✨" Style="{StaticResource PurpleGradientButtonStyle}" IsEnabled="{Binding !IsSummarizing}" Command="{Binding SummarizeCommand}" Margin="5"/>
+
+                <Button Grid.Column="2" Height="48"
+MinWidth="160" Content="Improve ✨" Style="{StaticResource PurpleGradientButtonStyle}" Command="{Binding AiImproveCommand}" Margin="5" />
+
+                <Button Grid.Column="3" Height="48"
+ MinWidth="160" Content="Tasks 📌" Style="{StaticResource PurpleGradientButtonStyle}"  Command="{Binding AiTasksCommand}"  Margin="5"/>
+
+                <Button Grid.Column="4" Height="48"
+ MinWidth="160" Content="Title 💡" Style="{StaticResource PurpleGradientButtonStyle}" Command="{Binding AiTitleCommand}"  Margin="5"/>
+
+                <Button Grid.Column="5" Height="48"
+ MinWidth="160" Content="Reminder 📅" Style="{StaticResource PurpleGradientButtonStyle}" Command="{Binding AiReminderCommand}" Margin="5"/>
+
+            </Grid>
+            
+
+            <!-- Footer -->
+            <Border Grid.Row="3"
+        Background="Transparent"
+        CornerRadius="12"
+        BorderBrush="#CCC"
+        BorderThickness="0"
+        Padding="8,6"
+        Margin="0,8,0,0"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <!-- Left side: icon + date -->
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Right side: close button -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left side: Clock icon + timestamp -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0" >
+
+                        <materialDesign:PackIcon Kind="Clock" Width="18" Height="18" Margin="0,0,8,0"
+                                     Foreground="{DynamicResource MaterialDesignHint}"
+                                     VerticalAlignment="Center" />
+
+                        <TextBlock x:Name="TxtCreatedAt" Text="{Binding Note.CreatedAt, StringFormat='{}{0:hh:mm tt, ddd MMM dd yyyy}'}"
+                       FontSize="13"
+                       Foreground="{DynamicResource MaterialDesignHint}"
+                       VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Right side: Close button -->
+                    <Button Grid.Column="1"
+                Width="80" Height="36"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Close"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Close" Width="20" Height="20"
+                                     Foreground="{DynamicResource MaterialDesignBody}" />
+                    </Button>
+
+                    <!--<Button Width="80" Height="36" HorizontalAlignment="Right" Background="Transparent" BorderBrush="Transparent" ToolTip="Close" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">-->
+                    <!--<materialDesign:PackIcon Kind="Close" Width="20" Height="20" Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </Button>-->
+                </Grid>
+            </Border>
+
+
+
+            <StackPanel x:Name="ToastContainer"
+VerticalAlignment="Top"
+HorizontalAlignment="Right"
+Margin="20"
+Width="300"
+Background="Transparent"/>
+        </Grid>
+    </Border>
+
+
+
+</UserControl>

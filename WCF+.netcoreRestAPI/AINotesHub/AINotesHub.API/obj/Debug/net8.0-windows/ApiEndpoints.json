@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "AINotesHub.API.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "AINotesHub.Shared.DTOs.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AINotesHub.API.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "AINotesHub.Shared.DTOs.RegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "AINotesHub.API.Controllers.NotesController",
     "Method": "GetNotes",
     "RelativePath": "api/Notes",
@@ -9,7 +41,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[AINotesHub.Shared.Note, AINotesHub.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[AINotesHub.Shared.Entities.Note, AINotesHub.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -29,13 +61,13 @@
     "Parameters": [
       {
         "Name": "note",
-        "Type": "AINotesHub.Shared.Note",
+        "Type": "AINotesHub.Shared.Entities.Note",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AINotesHub.Shared.Note",
+        "Type": "AINotesHub.Shared.Entities.Note",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -61,7 +93,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "AINotesHub.Shared.Note",
+        "Type": "AINotesHub.Shared.Entities.Note",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -86,7 +118,7 @@
       },
       {
         "Name": "note",
-        "Type": "AINotesHub.Shared.Note",
+        "Type": "AINotesHub.Shared.Entities.Note",
         "IsRequired": true
       }
     ],
@@ -104,6 +136,38 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AINotesHub.API.Controllers.NotesController",
+    "Method": "GetNextUntitled",
+    "RelativePath": "api/Notes/next-untitled",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AINotesHub.API.Controllers.NotesController",
+    "Method": "Search",
+    "RelativePath": "api/Notes/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

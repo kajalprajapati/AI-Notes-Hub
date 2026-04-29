@@ -1,19 +1,26 @@
 ﻿using AINotesHub.API.Data;
-using AINotesHub.Shared;
+using AINotesHub.API.Services;
+using AINotesHub.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AINotesHub.Shared.DTOs;
 
 namespace AINotesHub.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private readonly NotesDbContext _context;
 
-        public NotesController(NotesDbContext context)
+        private readonly DapperService _dapperService; // Dapper
+        private readonly NotesDbContext _context; //EF Core
+
+        public NotesController(NotesDbContext context, DapperService dapperService)
         {
             _context = context;
+            _dapperService = dapperService;
         }
 
 
@@ -47,6 +54,14 @@ namespace AINotesHub.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Note>> PostNote(Note note)
         {
+
+            var userIdClaim = User.FindFirst("id")?.Value;
+            if (userIdClaim == null)
+                return Unauthorized("Invalid token or user not found.");
+
+            note.UserId = Guid.Parse(userIdClaim);
+            note.CreatedAt = DateTime.UtcNow;
+
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
@@ -98,6 +113,37 @@ namespace AINotesHub.API.Controllers
 
             return NoContent();
         }
-    
+
+        //Temporarily allow access:[AllowAnonymous]
+
+        // ✅ Dapper - optimized query
+        //[Authorize]
+        [AllowAnonymous]
+        [HttpGet("search")]//APIEndpint
+        //[HttpGet("search")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            var result = await _dapperService.SearchNotes(keyword);
+
+            var response = new ApiResponse<IEnumerable<Note>>
+            {
+                Data = result,
+                Count = result.Count(),
+                Message = result.Any() ? "Success" : "No data found",
+                Success = result.Any()
+            };
+
+            return Ok(response);
+            
+        }
+
+        [HttpGet("next-untitled")]
+
+        public async Task<IActionResult> GetNextUntitled(Guid userId)
+        {
+            var nextNumber = await _dapperService.GetNextUntitledNumber(userId);
+            return Ok(nextNumber);
+        }
+
     }
 }
