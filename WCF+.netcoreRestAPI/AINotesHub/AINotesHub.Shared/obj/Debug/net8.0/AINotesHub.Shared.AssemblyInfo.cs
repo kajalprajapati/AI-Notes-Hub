@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AINotesHub.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc79bd77a23f2f27b0a41473c8cebda765fd5261")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f707b602315ce416aa3efb8bca61bb182ea5d83")]
 [assembly: System.Reflection.AssemblyProductAttribute("AINotesHub.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AINotesHub.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
