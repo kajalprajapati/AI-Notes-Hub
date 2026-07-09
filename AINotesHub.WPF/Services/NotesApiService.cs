@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Windows;
 using AINotesHub.Shared.DTOs;
-using AINotesHub.Shared.Entities; 
+using AINotesHub.Shared.Entities;
 using AINotesHub.WPF.Helpers;
 using Serilog;
 
@@ -112,13 +112,17 @@ namespace AINotesHub.WPF.Services
         /// <summary>
         /// Get all notes from the API.Get all notes (authorized).
         /// </summary>
-        public async Task<List<Note>> GetNotesAsync()
+        /// 
+        public async Task<List<Note>> GetNotesByPageAsync(int page, int pageSize)
         {
             try
             {
                 EnsureReady(); // 👈 ADD HERE
-                //var response = await _httpClient.GetAsync("api/notes");
-                var response = await SendRequest(() => _httpClient.GetAsync("api/notes"));
+                               //var response = await _httpClient.GetAsync("api/notes");
+                               //var response = await SendRequest(() => _httpClient.GetAsync("api/notes"));
+                var response = await SendRequest(
+                () => _httpClient.GetAsync($"api/notes?page={page}&pageSize={pageSize}"));
+
                 if (response.IsSuccessStatusCode)
                 {
                     var notes = await response.Content.ReadFromJsonAsync<List<Note>>();
@@ -127,7 +131,41 @@ namespace AINotesHub.WPF.Services
 
                 // Optionally, log error or show message
                 MessageBox.Show($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-                
+
+                return new List<Note>();
+            }
+            catch (HttpRequestException ex)
+            {
+
+                MessageBox.Show($"Network error: {ex.Message}");
+                return new List<Note>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unexpected error: {ex.Message}");
+                return new List<Note>();
+            }
+        }
+
+        public async Task<List<Note>> GetNotesAsync()
+        {
+            try
+            {
+                EnsureReady(); // 👈 ADD HERE
+                               //var response = await _httpClient.GetAsync("api/notes");
+                var response = await SendRequest(() => _httpClient.GetAsync("api/notes"));
+                //var response = await SendRequest(
+                //() => _httpClient.GetAsync($"api/notes?page={page}&pageSize={pageSize}"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var notes = await response.Content.ReadFromJsonAsync<List<Note>>();
+                    return notes ?? new List<Note>(); // return empty list if null
+                }
+
+                // Optionally, log error or show message
+                MessageBox.Show($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+
                 return new List<Note>();
             }
             catch (HttpRequestException ex)

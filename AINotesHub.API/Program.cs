@@ -2,11 +2,15 @@
 using System.Text;
 using AINotesHub.API.Data;
 using AINotesHub.API.Services;
+using AINotesHub.Shared.Configuration;
 using AINotesHub.WPF.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Asp.Versioning;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 //Debug.WriteLine("Admin hash: " + BCrypt.Net.BCrypt.HashPassword("admin123"));
 //Debug.WriteLine("Manager hash: " + BCrypt.Net.BCrypt.HashPassword("manager123"));
@@ -41,7 +45,7 @@ try
     // Log.Information("Starting API...");
 
     // 1. Read the settings into a variable
-    var jwtKey = builder.Configuration["Jwt:Key"];
+    var jwtKey = builder.Configuration["Jwt:SecretKey"];
     var jwtIssuer = builder.Configuration["Jwt:Issuer"];
     var jwtAudience = builder.Configuration["Jwt:Audience"];
     // Add services to the container.
@@ -51,6 +55,9 @@ try
     var jwtSettings = builder.Configuration.GetSection("JwtSettings");
     var secretKey = jwtSettings["SecretKey"];
 
+    //For AI API
+    builder.Services.Configure<OpenAIConfig>(
+    builder.Configuration.GetSection("OpenAI"));
 
     builder.Services.AddScoped<DapperService>();
     //builder.Services.AddScoped<NoteService>();
@@ -80,7 +87,7 @@ try
             ValidateIssuerSigningKey = true,
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
         };
     });
 
@@ -92,16 +99,100 @@ try
            .EnableSensitiveDataLogging()
            .EnableDetailedErrors());
 
+
+    //Api Versioning
+
+    builder.Services
+    .AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+
+        options.ApiVersionReader = ApiVersionReader.Combine(
+            new UrlSegmentApiVersionReader(),
+            new QueryStringApiVersionReader("api-version"),
+            new HeaderApiVersionReader("X-Version"),
+            new MediaTypeApiVersionReader("ver"));
+    })
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
+    //builder.Services.AddApiVersioning(options =>
+    //{
+    //    options.DefaultApiVersion = new(1, 0);
+    //    options.AssumeDefaultVersionWhenUnspecified = true;
+    //    options.ReportApiVersions = true;
+
+    //    // Combine multiple ways to read versions (Query string, Header, and Media Type)
+    //    options.ApiVersionReader = ApiVersionReader.Combine(
+    //            new UrlSegmentApiVersionReader(),
+    //        new QueryStringApiVersionReader("api-version"),
+    //        new HeaderApiVersionReader("X-Version"),
+    //        new MediaTypeApiVersionReader("ver")
+    //    );
+
+
+    //});
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();//For Swagger
     builder.Services.AddAuthorization();//For Authorization
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Title = "My API",
+            Version = "v1"
+        });
+
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter JWT Token"
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+    });
+
+
+
     var app = builder.Build();
+
+
+    app.UseHttpsRedirection();
 
     // Add authentication & authorization middleware
     app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseDefaultFiles();
+    app.UseStaticFiles();//To Enable Static Files
+
 
     // Create DB automatically if not exists
     //This will automatically create the database and apply migrations when you run your project.
@@ -119,15 +210,26 @@ try
                                        //app.UseSwaggerUI();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                "My API V1");
             c.RoutePrefix = "swagger"; // Default
         });
 
+        //builder.Services.AddSwaggerGen(options =>
+        //{
+        //    options.SwaggerDoc("v1", new OpenApiInfo
+        //    {
+        //        Title = "My API",
+        //        Version = "v1"
+        //    });
+
+        //});
+
     }
+
     //app.UseSwagger();
-    app.UseHttpsRedirection();
     app.MapControllers();
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     //app.Run();
 
     // ✅ Ensure Serilog logs app start & stop
@@ -139,7 +241,7 @@ catch (Exception ex)
 {
     Log.Fatal(ex.InnerException,
     "❌ Application start-up failed in {Environment}!");
-    
+
     //Log.Fatal(ex, "❌ Application start-up failed!");
 }
 finally

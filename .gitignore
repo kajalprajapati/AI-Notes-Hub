@@ -9,6 +9,9 @@ Secrets.cs
 bin/
 obj/
 
+#Ignore Logs
+Logs/
+
 # Ignore user files
 *.user
 *.suo

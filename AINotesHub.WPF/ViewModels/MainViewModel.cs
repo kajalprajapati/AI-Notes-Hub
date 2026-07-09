@@ -304,8 +304,8 @@ namespace AINotesHub.WPF.ViewModels
             _colorState = colorState
         ?? throw new ArgumentNullException(nameof(colorState));
 
-        //    _dapperService = dapperService
-        //?? throw new ArgumentNullException(nameof(dapperService));
+            //    _dapperService = dapperService
+            //?? throw new ArgumentNullException(nameof(dapperService));
 
             SidebarVM = sidebarVM;
             _serviceProvider = serviceProvider;
@@ -441,7 +441,7 @@ namespace AINotesHub.WPF.ViewModels
         //    //return $"Untitled {_counter++}";
         //}
 
-        
+
         private bool IsInvalidTitle(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -536,7 +536,7 @@ namespace AINotesHub.WPF.ViewModels
 
                         });
 
-                       
+
                         WeakReferenceMessenger.Default.Send(new SuccessMessage("Note added successfully!"));
                         //await Application.Current.Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.Background);
                         await Task.Delay(2000);// Wait a little so animation shows
@@ -608,12 +608,17 @@ namespace AINotesHub.WPF.ViewModels
                 var loadingDelay = Task.Delay(700); // ⏳ Your minimum delay
 
                 //Calling the API Services to get notes (this is the actual loading task)
-                var loadTask = _notesService.GetNotesAsync();
+                var loadallNotesTask = _notesService.GetNotesAsync();
+
+                var loadallNotesTaskBYPagination = _notesService.GetNotesByPageAsync(1, 10);
+
+
+                //GetNotesByPageAsync
 
                 // 3. Wait for both to finish simultaneously
-                await Task.WhenAll(loadingDelay, loadTask);
+                await Task.WhenAll(loadingDelay, loadallNotesTask);
 
-                var notes = await loadTask; // Get results from the task
+                var notes = await loadallNotesTask; // Get results from the task
 
                 // STOP loading FIRST
                 IsLoadingNotes = false;

@@ -3,8 +3,8 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using AINotesHub.WPF.Helpers;
-using Windows.Web.Http;
+using AINotesHub.Shared.Configuration;
+using Microsoft.Extensions.Configuration;
 using HttpClient = System.Net.Http.HttpClient;
 
 namespace AINotesHub.WPF.Services
@@ -19,9 +19,14 @@ namespace AINotesHub.WPF.Services
         public AIService()
         {
             //_client = new HttpClient();
+            var configuration = new ConfigurationBuilder()
+    .AddUserSecrets<AIService>()
+    .Build();
+
+            var apiKey = configuration["OpenAI:ApiKey"];
 
             _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", OpenAIConfig.ApiKey);
+                new AuthenticationHeaderValue("Bearer", apiKey);
 
             _client.BaseAddress =
             new Uri("https://api.openai.com/");

@@ -172,7 +172,10 @@ namespace AINotesHub.WPF
 
                         // Get filtered notes from somewhere (your data source or API)
                         var filteredNotes = await AppSession.NotesService.GetNotesAsync(); // example async call to fetch notes
-                                                                                           // Call LoadNotesAsync with required arguments
+                                                                        
+                        
+                        
+                        // Call LoadNotesAsync with required arguments
                         if (DataContext is MainViewModel mvm)
                         {
                             await mvm.LoadNotesAsync();

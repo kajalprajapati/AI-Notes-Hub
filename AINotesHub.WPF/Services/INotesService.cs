@@ -17,6 +17,10 @@ namespace AINotesHub.WPF.Services
         Task<(bool IsSuccess, string Message)> DeleteNoteAsync(Guid id);
         Task<ApiResponse<List<Note>>> SearchNotes(string keyword);
         Task<List<Note>> GetNotesAsync();
+        Task<List<Note>> GetNotesByPageAsync(
+    int page,
+    int pageSize);
+
 
 
         //public async Task AddNoteAsync(Note note) { }

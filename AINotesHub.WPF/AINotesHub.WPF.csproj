@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <UserSecretsId>dc733f38-b8ed-44d4-bcc5-8d35bb86ced8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,12 +20,15 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
 	  <PackageReference Include="MaterialDesignThemes" Version="5.2.1" /> <!--//(Material Design 3)MaterialDesignThemes v5 uses Material Design 3-->
-	  <PackageReference Include="MaterialDesignColors" Version="5.2.1" /><!--//(Material Design 3)-->
+	  <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" /><!--//(Material Design 3)-->
 	  <!--<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
 	  <PackageReference Include="MaterialDesignColors" Version="2.1.3" />-->
     <!--<PackageReference Include="MaterialDesignColors" Version="2.1.4" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />-->
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.7" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />

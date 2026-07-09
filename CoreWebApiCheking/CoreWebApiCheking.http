@@ -1,0 +1,6 @@
+@CoreWebApiCheking_HostAddress = http://localhost:5050
+
+GET {{CoreWebApiCheking_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

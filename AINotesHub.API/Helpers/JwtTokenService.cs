@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using System.Security.Claims;
 
 namespace AINotesHub.WPF.Helpers
 {
@@ -21,28 +23,45 @@ namespace AINotesHub.WPF.Helpers
             _config = config;
         }
 
+        //JWT Token generation
         public string GenerateToken(string username, string Role, Guid userId)
         {
-            var jwtSettings = _config.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
+            try
             {
+                var jwtSettings = _config.GetSection("Jwt");
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                //Role Based Authorization....
+                var claims = new[]
+                {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim("role", Role),      // 👈 include user role
+                new Claim(ClaimTypes.Role, Role),      // 👈 include user role
                 new Claim("id", userId.ToString()),      // 👈 FIX: convert Guid to string
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(double.Parse(jwtSettings["ExpiryMinutes"]!)),
-                signingCredentials: creds);
+                //JWT validation configuration
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                var token = new JwtSecurityToken(
+                    issuer: jwtSettings["Issuer"],
+                    audience: jwtSettings["Audience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(double.Parse(jwtSettings["ExpiryMinutes"]!)),
+                    signingCredentials: creds);
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "JWTAuth creation error while generating Token");
+
+                //return "Token generation failed.";
+                return "Internal server error.";
+
+            }
+
         }
     }
 }

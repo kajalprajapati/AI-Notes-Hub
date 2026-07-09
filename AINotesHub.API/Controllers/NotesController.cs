@@ -1,16 +1,27 @@
-﻿using AINotesHub.API.Data;
+﻿using System.Security.Claims;
+using AINotesHub.API.Data;
 using AINotesHub.API.Services;
+using AINotesHub.Shared.DTOs;
 using AINotesHub.Shared.Entities;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AINotesHub.Shared.DTOs;
 
 namespace AINotesHub.API.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
+    //REST-style endpoints.
+    //[Authorize] //Protect Entire Controller
+    //[Route("api/[controller]")]
+    [ApiController]    //AfterAdding APivesion
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    //[ApiVersion("10.0")]
+
+    [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
+
     public class NotesController : ControllerBase
     {
 
@@ -29,11 +40,121 @@ namespace AINotesHub.API.Controllers
         //    return View();
         //}
 
-        // GET: api/notes
+
+        //[HttpGet]
+        //[MapToApiVersion("1.0")]
+        //public IActionResult GetV1()
+        //{
+        //    return Ok("Version 1");
+        //}
+
+        //[HttpGet]
+        //[MapToApiVersion("2.0")]
+        //public IActionResult GetV2()
+        //{
+        //    return Ok("Version 2");
+        //}
+
+
+        //[Authorize]//Protected
+        //[AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
         {
             return await _context.Notes.ToListAsync();
+        }
+
+        //With Pagination
+        // [AllowAnonymous]
+        // GET: api/notes
+
+        //[HttpGet("?page={page}&pageSize={pageSize}/")]
+        [HttpGet("paged")]
+        //[HttpGet]
+
+        //GET /api/notes/paged?page=1&pageSize=10
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotesByPage(int page = 1, int pageSize = 10)
+        {
+            ///var Result = ((page - 1) * pageSize);
+
+            var totalCount = await _context.Notes.CountAsync();
+
+            var notes = await _context.Notes
+    .OrderBy(n => n.Id)
+    .Skip((page - 1) * pageSize)
+    .Take(pageSize)
+    .ToListAsync();
+
+            //return await _context.Notes.OrderBy(n => n.CreatedAt).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return Ok(new
+            {
+                TotalCount = totalCount,
+                Notes = notes
+            });
+        }
+
+
+        [Authorize]
+        [HttpGet("claims")]
+        public IActionResult Claims()
+        {
+
+            // return Ok("Working");
+
+            return Ok(User.Claims.Select(c => new
+            {
+                c.Type,
+                c.Value
+            }));
+        }
+
+
+        //[Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Admin")]//Admin can see all users data...
+        [HttpGet("all-users")]
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetAllUsers()
+        {
+            //return await _context.Users.ToListAsync();
+            var users = await _context.Users
+           .Select(u => new UserListDto
+           {
+               Id = u.Id,
+               Username = u.Username,
+               Role = u.Role
+
+           })
+           .ToListAsync();
+            return Ok(users);
+
+
+            //return Ok();
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-test")]
+        public IActionResult AdminTest()
+        {
+            return Ok("Admin Access Granted");
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("user-test")]
+        public IActionResult UserTest()
+        {
+            return Ok("User Access Granted");
+        }
+        [Authorize]
+        [HttpGet("my-role")]
+        public IActionResult MyRole()
+        {
+            return Ok(new
+            {
+                //User is an inbuilt ASP.NET Core property available inside controllers.
+                Username = User.Identity?.Name,
+                Role = User.FindFirst(ClaimTypes.Role)?.Value
+            });
         }
 
         // GET: api/notes/5
@@ -70,12 +191,17 @@ namespace AINotesHub.API.Controllers
 
         // PUT: api/notes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNote(Guid id, Note note)
+        //public async Task<IActionResult> UpdateNote(Guid id, Note note)
+        public async Task<IActionResult> UpdateNote(Guid id, UpdateNoteDto dto)
         {
-            if (id != note.Id)
-            {
-                return BadRequest();
-            }
+            var note = await _context.Notes.FindAsync(id);
+
+            if (note == null)
+                return NotFound();
+
+            note.Title = dto.Title;
+            note.Content = dto.Content;
+            note.Category = dto.Category;
 
             _context.Entry(note).State = EntityState.Modified;
 
@@ -97,6 +223,35 @@ namespace AINotesHub.API.Controllers
 
             return NoContent();
         }
+
+
+        //public async Task<IActionResult> PutNote(Guid id, Note note)
+        //{
+        //    if (id != note.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    _context.Entry(note).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!_context.Notes.Any(e => e.Id == id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
 
         // DELETE: api/notes/5
         [HttpDelete("{id}")]
@@ -134,7 +289,7 @@ namespace AINotesHub.API.Controllers
             };
 
             return Ok(response);
-            
+
         }
 
         [HttpGet("next-untitled")]
