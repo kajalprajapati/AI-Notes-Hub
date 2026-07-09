@@ -1,0 +1,149 @@
+﻿body {
+    margin: 0;
+    /*    background-color: #f4f6f8;
+
+
+*/
+/*    background: yellow !important;
+*/    background-color: lightblue;
+    font-family: Arial, sans-serif;
+}
+
+
+
+/* Main */
+.container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+
+/*id*/
+#notesContainer {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    min-height: 300px;
+}
+
+/*Class*/
+/*
+.note-card {
+    background: red !important;
+    color: white !important;
+}*/
+
+.note-card {
+    background-color: #334155;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.pagination {
+    justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+    .pagination button:hover {
+        background-color: #1d4ed8;
+    }
+    /**/
+    .note-card h3 {
+    margin-top: 0;
+    color: white;
+}
+
+    .note-card p {
+        color: white;
+    }
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: crimson;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: maroon;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+/* Header */
+.header {
+    background: #1e293b;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Navigation */
+.navbar {
+    background: #0078D7;
+    padding: 15px;
+    text-align: center;
+}
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 20px;
+    }
+
+
+/* Notes */
+.note {
+    padding: 12px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Footer */
+.footer {
+    background: #1e293b;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+
+.btn {
+    padding: 12px 20px;
+    cursor: pointer;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+    .btn:hover {
+        background-color: #1d4ed8;
+    }

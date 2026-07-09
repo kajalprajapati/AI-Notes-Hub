@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="css/Styles.css" />
+
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="container">
+
+
+        <section class="card">
+            <h2>Create Note</h2>
+
+            <input type="text"
+                   placeholder="Enter note title"
+                   class="input-field">
+
+            <button class="btn">
+                Add Note
+            </button>
+        </section>
+
+
+        <section class="card">
+            <h2>My Notes</h2>
+
+            <div id="notesContainer"></div>
+
+            <div class="pagination">
+
+                <button id="prevBtn">Previous</button>
+
+                <span id="pageNumber">1</span>
+
+                <button id="nextBtn">Next</button>
+
+                <!--<span id="totalNotes"></span>-->
+                <span id="notesInfo"></span>
+
+            </div>
+
+            <!--<div id="notesContainer">
+                <div class="note">Sample Note 1</div>
+                <div class="note">Sample Note 2</div>
+            </div>-->
+        </section>
+
+        <div id="footer"></div>
+
+    </main>
+    <script src="js/common.js"></script>
+    <script src="js/notes.js"></script>
+
+</body>
+</html>
