@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="css/Styles.css" />
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="container">
+
+        <section class="card">
+
+            <h2>Create Note</h2>
+
+            <div class="form-group">
+                <label for="title">Title</label>
+
+                <input type="text"
+                       id="title"
+                       class="input-field"
+                       placeholder="Enter note title"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content</label>
+
+                <textarea id="content"
+                          class="input-field"
+                          rows="5"
+                          placeholder="Enter note content"
+                          required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="attachment">Attachment</label>
+
+                <input type="file"
+                       id="attachment"
+                       name="attachment"
+                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt,.xls,.xlsx">
+
+                <small>
+                    Allowed: PDF, Word, Excel, Images, Text (Max 5 MB)
+                </small>
+            </div>
+
+            <button id="btnAddNote" class="btn">
+                Add Note
+            </button>
+
+        </section>
+        <div id="footer"></div>
+
+    </main>
+</body>
+</html>

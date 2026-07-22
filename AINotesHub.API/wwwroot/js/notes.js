@@ -14,10 +14,9 @@ async function loadNotes() {
     console.log("notes");
 }
 
-
 async function loadNotes(page) {
 
-    //debugger;
+   // debugger;
 
     try {
         console.log("loadNotes called");
@@ -30,14 +29,19 @@ async function loadNotes(page) {
 
         //`/api/notes/paged?page=${page}&pageSize=${pageSize}`,
 
-        const response =
-            await fetch(
-                `/api/v2/notes/paged?page=${page}&pageSize=${pageSize}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
+        //const response =
+        //    await fetch(
+        //        `/api/v2/notes/paged?page=${page}&pageSize=${pageSize}`,
+        //const response = await fetch(
+        //    `${AppConfig.BaseApiUrl}/${AppConfig.ApiVersion}/notes/paged?page=${page}&pageSize=${AppConfig.PageSize}`,
+        //    {
+        //AppConfig.getPagedNotesUrl(page),
+        //{
+        const response = await fetch(AppConfig.Urls.GetPagedNotes(page), {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
         console.log("Status:", response.status);
 
@@ -49,7 +53,16 @@ async function loadNotes(page) {
 
         // Render latest notes
 
-        renderNotes(data.notes);
+        renderNotes(data.items);
+
+        currentPage = data.currentPage;
+
+        hasNextPage = data.hasNextPage;
+
+        hasPreviousPage = data.hasPreviousPage;
+
+        document.getElementById("btnNext").disabled = !hasNextPage;
+        document.getElementById("btnPrevious").disabled = !hasPreviousPage;
 
         document.getElementById("pageNumber")
             .textContent = page;
@@ -72,7 +85,25 @@ async function loadNotes(page) {
     }
 
 }
+function nextPage() {
 
+    if (!hasNextPage)
+        return;
+
+    currentPage++;
+
+    loadNotes(currentPage);
+}
+
+function previousPage() {
+
+    if (!hasPreviousPage)
+        return;
+
+    currentPage--;
+
+    loadNotes(currentPage);
+}
 function renderNotes(notes) {
     try {
 
@@ -113,28 +144,30 @@ function renderNotes(notes) {
 
 }
 let currentPage = 1;
+let hasNextPage = false;
+let hasPreviousPage = false;
 const pageSize = 10
 
-document.getElementById("nextBtn")
-    .addEventListener("click", () => {
+//document.getElementById("nextBtn")
+//    .addEventListener("click", () => {
 
-        currentPage++;
+//        currentPage++;
 
-        loadNotes(currentPage);
-    });
+//        loadNotes(currentPage);
+//    });
 
-document.getElementById("prevBtn")
-    .addEventListener("click", () => {
+//document.getElementById("prevBtn")
+//    .addEventListener("click", () => {
 
-        if (currentPage > 1) {
+//        if (currentPage > 1) {
 
-            currentPage--;
+//            currentPage--;
 
-            loadNotes(currentPage);
-        }
-    });
+//            loadNotes(currentPage);
+//        }
+//    });
 
-;
+//;
 
 //const startRecord = (currentPage - 1) * pageSize + 1;
 

@@ -19,7 +19,6 @@ function checkAuthentication() {
         window.location.href = "login.html";
     }
 }
-
 function logout() {
 
     localStorage.removeItem("token");
@@ -29,7 +28,6 @@ function logout() {
 }
 
 document.getElementById("loadNotesBtn").addEventListener("click", loadNotes)
-
 
 document.getElementById("JsNotestestBtn").addEventListener("click", function () {
 

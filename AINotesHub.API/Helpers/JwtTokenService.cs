@@ -35,9 +35,10 @@ namespace AINotesHub.WPF.Helpers
                 //Role Based Authorization....
                 var claims = new[]
                 {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.PreferredUsername, username),
                 new Claim(ClaimTypes.Role, Role),      // 👈 include user role
-                new Claim("id", userId.ToString()),      // 👈 FIX: convert Guid to string
+                new Claim(ClaimTypes.NameIdentifier ,userId.ToString()),      // 👈 FIX: convert Guid to string
+                //new Claim("id", userId.ToString()),      // 👈 FIX: convert Guid to string
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -49,6 +50,8 @@ namespace AINotesHub.WPF.Helpers
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(double.Parse(jwtSettings["ExpiryMinutes"]!)),
                     signingCredentials: creds);
+
+
 
                 return new JwtSecurityTokenHandler().WriteToken(token);
 

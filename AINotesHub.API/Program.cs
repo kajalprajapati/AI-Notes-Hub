@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Text;
 using AINotesHub.API.Data;
+using AINotesHub.API.Middleware;
 using AINotesHub.API.Services;
 using AINotesHub.Shared.Configuration;
 using AINotesHub.WPF.Helpers;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Asp.Versioning;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
 //Debug.WriteLine("Admin hash: " + BCrypt.Net.BCrypt.HashPassword("admin123"));
@@ -41,6 +42,8 @@ try
         .Enrich.FromLogContext()   // ✔ recommended
     .WriteTo.Console()         // ✔ show logs in console
         .CreateLogger();
+
+    builder.Services.AddSerilog();
 
     // Log.Information("Starting API...");
 
@@ -143,8 +146,6 @@ try
     builder.Services.AddSwaggerGen();//For Swagger
     builder.Services.AddAuthorization();//For Authorization
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("v1", new OpenApiInfo
@@ -185,11 +186,10 @@ try
 
 
     app.UseHttpsRedirection();
-
     // Add authentication & authorization middleware
+    app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseAuthentication();
     app.UseAuthorization();
-
     app.UseDefaultFiles();
     app.UseStaticFiles();//To Enable Static Files
 
