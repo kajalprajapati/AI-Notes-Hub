@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AINotesHub.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AINotesHub.Shared.Entities
@@ -31,12 +32,11 @@ namespace AINotesHub.Shared.Entities
 
         public string? SuggestedTitlesJson { get; set; }  // ✅ Your new field
 
-        public string? AttachmentFileName { get; set; }
-
-        public string? AttachmentPath { get; set; }
+        public ICollection<NoteAttachment> Attachments { get; set; }
+    = new List<NoteAttachment>();
 
         // 🆕 Added with annotation
-        
+
         //public string category = string.Empty;
 
         //// Creation timestamp (mandatory)
@@ -52,6 +52,6 @@ namespace AINotesHub.Shared.Entities
 
         ////[Required(ErrorMessage = "Creator information is required.")]
         ////[StringLength(50, ErrorMessage = "Creator name cannot exceed 50 characters.")]
-        
+
     }
 }

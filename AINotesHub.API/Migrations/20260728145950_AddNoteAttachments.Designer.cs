@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AINotesHub.API.Migrations
 {
     [DbContext(typeof(NotesDbContext))]
-    [Migration("20260709130620_AddFileAttachmentToNotes")]
-    partial class AddFileAttachmentToNotes
+    [Migration("20260728145950_AddNoteAttachments")]
+    partial class AddNoteAttachments
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,12 +126,6 @@ namespace AINotesHub.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AttachmentFileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CardBackground")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -190,6 +184,51 @@ namespace AINotesHub.API.Migrations
                     b.ToTable("Notes");
                 });
 
+            modelBuilder.Entity("AINotesHub.Shared.Models.NoteAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("NoteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UploadedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("NoteAttachments");
+                });
+
             modelBuilder.Entity("AINotesHub.Shared.Entities.Note", b =>
                 {
                     b.HasOne("AINotesHub.Shared.Entities.AppUser", "User")
@@ -201,9 +240,25 @@ namespace AINotesHub.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AINotesHub.Shared.Models.NoteAttachment", b =>
+                {
+                    b.HasOne("AINotesHub.Shared.Entities.Note", "Note")
+                        .WithMany("Attachments")
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Note");
+                });
+
             modelBuilder.Entity("AINotesHub.Shared.Entities.AppUser", b =>
                 {
                     b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("AINotesHub.Shared.Entities.Note", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 #pragma warning restore 612, 618
         }

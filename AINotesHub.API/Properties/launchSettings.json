@@ -22,9 +22,9 @@
         "https": {
             "commandName": "Project",
             "dotnetRunMessages": true,
-            "launchBrowser": true,
-            //"launchUrl": "",
-            "launchUrl": "login.html",
+            "launchBrowser": false,
+            "launchUrl": "",
+            //"launchUrl": "login.html",
 
             //"launchUrl": "swagger",
             "applicationUrl": "https://localhost:44357;http://localhost:5230",
@@ -34,7 +34,7 @@
         },
         "IIS Express": {
             "commandName": "IISExpress",
-            "launchBrowser": true,
+            "launchBrowser": false,
             "launchUrl": "swagger",
             "applicationUrl": "http://localhost:5255;http://localhost:5001;http://localhost:5000",
             "environmentVariables": {

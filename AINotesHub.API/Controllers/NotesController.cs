@@ -317,7 +317,7 @@ namespace AINotesHub.API.Controllers
         [HttpPatch("{id}/star")]
         public async Task<IActionResult> ToggleStar(Guid id)
         {
-           // throw new Exception("Testing Global Exception Middleware");
+           throw new Exception("Testing Global Exception Middleware");
 
             var note = await _context.Notes.FindAsync(id);
 

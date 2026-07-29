@@ -130,24 +130,52 @@ namespace AINotesHub.API.Controllers
         }
 
         [HttpPost("register")]
-        [AllowAnonymous] // IMPORTANT: Needed for unauthenticated users
+        //[AllowAnonymous] // IMPORTANT: Needed for unauthenticated users
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Invalid registration data.");
+                //return BadRequest("Invalid registration data.");
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Invalid registration data.",
+                    Errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList()
+                });
 
             // 🔍 Check if email already exists
             if (_context.Users.Any(u => u.Email == request.Email))
-                return Conflict("Email already registered.");
+            {
+                return Conflict(new ApiResponse<object>
+                {
+                    Success = false,
+                    StatusCode = StatusCodes.Status409Conflict,
+                    Message = "Email already registered."
+                });
+            }
+                
+            //return Conflict("Email already registered.");
 
             // Check if email exists
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == request.Email);
-            if (existingUser != null)
-                return BadRequest("Email already registered.");
+            //var existingUser = _context.Users.FirstOrDefault(u => u.Email == request.Email);
+            //if (existingUser != null)
+            //    return BadRequest("Email already registered.");
 
             // 🔍 Check if username already exists
-            if (_context.Users.Any(u => u.Username == request.Username))
-                return Conflict("Username already taken.");
+            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+            {
+                return Conflict(new ApiResponse<object>
+                {
+                    Success = false,
+                    StatusCode = StatusCodes.Status409Conflict,
+                    Message = "Username already taken."
+                });
+            }
+            //if (_context.Users.Any(u => u.Username == request.Username))
+            //    return Conflict("Username already taken.");
 
             // 🔐 Hash password
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
@@ -167,7 +195,20 @@ namespace AINotesHub.API.Controllers
 
             Log.Information("New user registered: {Email}", request.Email);
 
-            return Ok("Registration successful.");
+            //return Ok("Registration successful.");
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Registration completed successfully.",
+                Data = new
+                {
+                    user.Id,
+                    user.Username,
+                    user.Email,
+                    user.Role
+                }
+            });
         }
 
         //public IActionResult Index()

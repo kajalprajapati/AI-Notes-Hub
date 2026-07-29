@@ -11,22 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-
-//Debug.WriteLine("Admin hash: " + BCrypt.Net.BCrypt.HashPassword("admin123"));
-//Debug.WriteLine("Manager hash: " + BCrypt.Net.BCrypt.HashPassword("manager123"));
-//Debug.WriteLine("User hash: " + BCrypt.Net.BCrypt.HashPassword("User123"));
-//Environment.Exit(0); // stop app immediately after printing
-
-//var builder = WebApplication.CreateBuilder(args);
-
-// ✅ Read configuration from appsettings.json
-//Log.Logger = new LoggerConfiguration()
-//    .ReadFrom.Configuration(builder.Configuration)
-//    .Enrich.FromLogContext()
-//    .WriteTo.Console()
-//    .CreateLogger();
-
 
 try
 {
@@ -63,7 +47,6 @@ try
     builder.Configuration.GetSection("OpenAI"));
 
     builder.Services.AddScoped<DapperService>();
-    //builder.Services.AddScoped<NoteService>();
 
     builder.Services.AddAuthentication(options =>
     {
@@ -124,22 +107,7 @@ try
         options.SubstituteApiVersionInUrl = true;
     });
 
-    //builder.Services.AddApiVersioning(options =>
-    //{
-    //    options.DefaultApiVersion = new(1, 0);
-    //    options.AssumeDefaultVersionWhenUnspecified = true;
-    //    options.ReportApiVersions = true;
 
-    //    // Combine multiple ways to read versions (Query string, Header, and Media Type)
-    //    options.ApiVersionReader = ApiVersionReader.Combine(
-    //            new UrlSegmentApiVersionReader(),
-    //        new QueryStringApiVersionReader("api-version"),
-    //        new HeaderApiVersionReader("X-Version"),
-    //        new MediaTypeApiVersionReader("ver")
-    //    );
-
-
-    //});
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
@@ -186,7 +154,7 @@ try
 
 
     app.UseHttpsRedirection();
-    // Add authentication & authorization middleware
+    //Add authentication & authorization middleware
     app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseAuthentication();
     app.UseAuthorization();
@@ -194,13 +162,7 @@ try
     app.UseStaticFiles();//To Enable Static Files
 
 
-    // Create DB automatically if not exists
-    //This will automatically create the database and apply migrations when you run your project.
-    using (var scope = app.Services.CreateScope())
-    {
-        var db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
-        db.Database.Migrate(); // <-- Important for auto-create + apply migrations
-    }
+
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -229,8 +191,7 @@ try
 
     //app.UseSwagger();
     app.MapControllers();
-    //app.UseHttpsRedirection();
-    //app.Run();
+
 
     // ✅ Ensure Serilog logs app start & stop
 
@@ -241,7 +202,7 @@ catch (Exception ex)
 {
     Log.Fatal(ex.InnerException,
     "❌ Application start-up failed in {Environment}!");
-
+    throw;   // Temporarily add this while debugging
     //Log.Fatal(ex, "❌ Application start-up failed!");
 }
 finally
