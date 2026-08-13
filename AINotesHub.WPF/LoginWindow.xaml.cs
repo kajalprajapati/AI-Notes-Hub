@@ -100,8 +100,12 @@ namespace AINotesHub.WPF
                 };
 
                 Log.Information("User '{Username}' attempting to log in...", email);
-                var response = await _httpClient.PostAsJsonAsync("api/auth/login", loginRequest);
+                //var response = await _httpClient.PostAsJsonAsync("api/auth/login", loginRequest);
+                //var response = await _httpClient.PostAsJsonAsync("api/v1/auth/login", loginRequest);
+                var response = await _httpClient.PostAsJsonAsync(ApiEndpoints.Login, loginRequest);
 
+
+                //api/v1/Auth/login
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     // 🔹 Unauthorized → user not found / wrong password

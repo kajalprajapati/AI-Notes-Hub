@@ -94,7 +94,7 @@
 
         <TextBlock Grid.Row="4" HorizontalAlignment="Center" Margin="0,15,0,0">
     <Run Text="Don't have an account?"/>
-    <Hyperlink Click="Hyperlink_Click_Register">
+    <Hyperlink  Click="Hyperlink_Click_Register">
         <Run Text="Register here."/>
     </Hyperlink>
         </TextBlock>

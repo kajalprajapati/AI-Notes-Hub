@@ -1,15 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Windows;
-using AINotesHub.API.Data;
+﻿using AINotesHub.API.Data;
 using AINotesHub.Shared.DTOs;
 using AINotesHub.Shared.Entities;
 using AINotesHub.WPF.Helpers;
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -19,13 +12,11 @@ using RegisterRequest = AINotesHub.Shared.DTOs.RegisterRequest;
 
 namespace AINotesHub.API.Controllers
 {
-    //[Authorize]
-    //[ApiController]
+    //[Authorize]login itself normally should NOT require authentication
     //[Route("api/[controller]")]
     [ApiController]    //AfterAdding APivesion
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]
-    //[ApiVersion("10.0")]
 
     [Route("api/v{version:apiVersion}/[controller]")]
 

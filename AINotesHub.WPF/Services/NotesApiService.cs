@@ -153,20 +153,27 @@ namespace AINotesHub.WPF.Services
             {
                 EnsureReady(); // 👈 ADD HERE
                                //var response = await _httpClient.GetAsync("api/notes");
-                var response = await SendRequest(() => _httpClient.GetAsync("api/notes"));
+                               //var response = await SendRequest(() => _httpClient.GetAsync("api/v1/Notes"));
+
+                var response = await SendRequest(() => _httpClient.GetAsync(ApiEndpoints.Notes));
+
                 //var response = await SendRequest(
                 //() => _httpClient.GetAsync($"api/notes?page={page}&pageSize={pageSize}"));
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var notes = await response.Content.ReadFromJsonAsync<List<Note>>();
-                    return notes ?? new List<Note>(); // return empty list if null
+                    //var notes = await response.Content.ReadFromJsonAsync<List<Note>>();
+                    var result = await response.Content
+    .ReadFromJsonAsync<ApiResponse<List<Note>>>();
+                    //return notes ?? new List<Note>(); // return empty list if null
+                    var notes = result?.Data;
+                    return notes;
                 }
 
                 // Optionally, log error or show message
                 MessageBox.Show($"Error: {response.StatusCode} - {response.ReasonPhrase}");
 
-                return new List<Note>();
+                return new List<Note>();//
             }
             catch (HttpRequestException ex)
             {

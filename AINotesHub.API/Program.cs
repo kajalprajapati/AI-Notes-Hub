@@ -111,7 +111,7 @@ try
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();//For Swagger
+    //builder.Services.AddSwaggerGen();//For Swagger
     builder.Services.AddAuthorization();//For Authorization
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddSwaggerGen(options =>
@@ -162,8 +162,6 @@ try
     app.UseStaticFiles();//To Enable Static Files
 
 
-
-
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -177,19 +175,9 @@ try
             c.RoutePrefix = "swagger"; // Default
         });
 
-        //builder.Services.AddSwaggerGen(options =>
-        //{
-        //    options.SwaggerDoc("v1", new OpenApiInfo
-        //    {
-        //        Title = "My API",
-        //        Version = "v1"
-        //    });
-
-        //});
 
     }
 
-    //app.UseSwagger();
     app.MapControllers();
 
 
@@ -200,7 +188,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex.InnerException,
+    Log.Fatal(ex,
     "❌ Application start-up failed in {Environment}!");
     throw;   // Temporarily add this while debugging
     //Log.Fatal(ex, "❌ Application start-up failed!");
