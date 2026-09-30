@@ -27,7 +27,7 @@ function logout() {
     window.location.href = "login.html";
 }
 
-document.getElementById("loadNotesBtn").addEventListener("click", loadNotes)
+//document.getElementById("loadNotesBtn").addEventListener("click", loadNotes)
 
 document.getElementById("JsNotestestBtn").addEventListener("click", function () {
 

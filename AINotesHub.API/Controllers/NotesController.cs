@@ -13,29 +13,56 @@ using Microsoft.EntityFrameworkCore;
 namespace AINotesHub.API.Controllers
 {
     //REST-style endpoints.
-    //[Authorize] //Protect Entire Controller
     //[Route("api/[controller]")]
     [ApiController]    //AfterAdding APivesion
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]
-    //[ApiVersion("10.0")]
     [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Route("api/[controller]")]
 
     public class NotesController : ControllerBase
     {
         private readonly ILogger<NotesController> _logger;
         private readonly DapperService _dapperService; // Dapper
         private readonly NotesDbContext _context; //EF Core
+        private readonly NotificationService _notificationService;
 
-        public NotesController(NotesDbContext context, DapperService dapperService, ILogger<NotesController> logger)
+        public NotesController(NotesDbContext context, DapperService dapperService, ILogger<NotesController> logger, NotificationService notificationService)
         {
             _context = context;
             _dapperService = dapperService;
             _logger = logger;
-
+            _notificationService = notificationService;
         }
+
+        //[HttpPost("test-notification")]
+        //public async Task<IActionResult> TestNotification()
+        //{
+        //    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    if (string.IsNullOrEmpty(userIdClaim))
+        //        return Unauthorized("User ID not found in token.");
+
+        //    if (!Guid.TryParse(userIdClaim, out var userId))
+        //        return BadRequest("Invalid User ID in token.");
+
+        //    var note = await _context.Notes
+        //        .FirstOrDefaultAsync(n => n.UserId == userId);
+
+        //    if (note == null)
+        //        return NotFound("No note found for this user.");
+
+        //    await _notificationService.CreateNotificationAsync(
+        //        userId,
+        //        note.Id,
+        //        $"Reminder: {note.Title}");
+
+        //    return Ok(new
+        //    {
+        //        message = "Notification created successfully.",
+        //        noteId = note.Id
+        //    });
+        //}
 
         //[HttpGet]
         //[Authorize]//Protected
@@ -44,6 +71,8 @@ namespace AINotesHub.API.Controllers
         public async Task<ActionResult<IEnumerable<Note>>> GetAllNotes()
         {
             var notes = await _context.Notes.ToListAsync();
+
+
 
             //if (!notes.Any())
             //{
@@ -317,7 +346,7 @@ namespace AINotesHub.API.Controllers
         [HttpPatch("{id}/star")]
         public async Task<IActionResult> ToggleStar(Guid id)
         {
-           throw new Exception("Testing Global Exception Middleware");
+            throw new Exception("Testing Global Exception Middleware");
 
             var note = await _context.Notes.FindAsync(id);
 

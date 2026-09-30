@@ -47,6 +47,8 @@ try
     builder.Configuration.GetSection("OpenAI"));
 
     builder.Services.AddScoped<DapperService>();
+    builder.Services.AddScoped<NotificationService>();
+    builder.Services.AddHostedService<ReminderBackgroundService>();//BackgroundService
 
     builder.Services.AddAuthentication(options =>
     {
@@ -76,6 +78,7 @@ try
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
         };
     });
+
 
     // Configure DbContext to use SQL Server
     //builder.Services.AddDbContext<NotesDbContext>(options =>
@@ -114,6 +117,19 @@ try
     //builder.Services.AddSwaggerGen();//For Swagger
     builder.Services.AddAuthorization();//For Authorization
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("NextJsPolicy", policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+
+
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("v1", new OpenApiInfo
@@ -152,7 +168,6 @@ try
 
     var app = builder.Build();
 
-
     app.UseHttpsRedirection();
     //Add authentication & authorization middleware
     app.UseMiddleware<GlobalExceptionMiddleware>();
@@ -179,7 +194,7 @@ try
     }
 
     app.MapControllers();
-
+    app.UseCors("NextJsPolicy");
 
     // ✅ Ensure Serilog logs app start & stop
 

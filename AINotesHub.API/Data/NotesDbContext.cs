@@ -14,6 +14,7 @@ namespace AINotesHub.API.Data
 
         public DbSet<Note> Notes { get; set; } = null!;
         public DbSet<AppUser> Users { get; set; } = null!;
+        public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<NoteAttachment> NoteAttachments { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +37,20 @@ namespace AINotesHub.API.Data
                 .WithMany(n => n.Attachments)
                 .HasForeignKey(a => a.NoteId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Notification>()
+        .HasOne(n => n.User)
+        .WithMany()
+        .HasForeignKey(n => n.UserId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.Note)
+                .WithMany()
+                .HasForeignKey(n => n.NoteId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
         public override Task<int> SaveChangesAsync(
     bool acceptAllChangesOnSuccess,

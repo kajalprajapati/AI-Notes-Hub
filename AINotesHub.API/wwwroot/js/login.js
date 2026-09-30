@@ -6,7 +6,8 @@ if (token) {
     window.location.href = "notes.html";
 }
 
-document.getElementById("loginBtn").addEventListener("click", login)
+//document.getElementById("loginBtn").addEventListener("click", login)
+
 
 async function login() {
 
@@ -19,39 +20,47 @@ async function login() {
             document.getElementById("password").value;
 
         const response =
-            await fetch("/api/auth/login", {
+            await fetch(ApiRoutes.login)
+        /* await fetch("/api/auth/login", {*/
 
-                method: "POST",
+        method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+            headers: {
+            "Content-Type": "application/json"
+        },
 
-                body: JSON.stringify({
-                    usernameOrEmail,
-                    password
-                })
-            });
+        body: JSON.stringify({
+            usernameOrEmail,
+            password
+        })
+    });
 
-        if (!response.ok) {
+    if (!response.ok) {
 
-            throw new Error("Login Failed");
-        }
-
-        const data = await response.json();
-
-        console.log("Login Response:", data);
-
-        localStorage.setItem("token", data.token);
-
-        window.location.href = "index.html";
-
+        throw new Error("Login Failed");
     }
+
+    const data = await response.json();
+
+    console.log("Login Response:", data);
+
+    localStorage.setItem("token", data.token);
+
+    window.location.href = "index.html";
+
+}
     catch (error) {
 
-        console.error(error);
+    console.error(error);
 
-        document.getElementById("message").textContent =
-            error.message;
-    }
+    document.getElementById("message").textContent =
+        error.message;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loginBtn').addEventListener('click', login);
+});
+
+
+
+

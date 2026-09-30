@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AINotesHub.WPF.Services
+namespace AINotesHub.Shared.Routes
 {
-    public static class ApiEndpoints
+    public static class ApiRoutes
     {
-
         // Change API version here only
         private const string Version = "v1";
 
@@ -24,6 +23,5 @@ namespace AINotesHub.WPF.Services
 
         // Attachments
         public const string Attachments = $"{BasePath}/attachments";
-
     }
 }

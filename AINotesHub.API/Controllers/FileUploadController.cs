@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Claims;
 using AINotesHub.API.Data;
 using AINotesHub.Shared.DTOs;
 using AINotesHub.Shared.Models;
@@ -12,7 +13,7 @@ namespace AINotesHub.API.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/files")]
-    [Authorize]
+    //[Authorize]
     public class FileUploadController : Controller
     {
         private readonly NotesDbContext _context;
@@ -43,6 +44,7 @@ namespace AINotesHub.API.Controllers
         }
 
         [HttpPost("upload")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadFile(
     [FromForm] FileUploadRequest request)
         {
@@ -57,10 +59,21 @@ namespace AINotesHub.API.Controllers
                     });
                 }
 
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!Guid.TryParse(userIdClaim, out var userId))
+                {
+                    return Unauthorized(new
+                    {
+                        success = false,
+                        message = "Unable to identify the logged-in user."
+                    });
+                }
 
                 // Check note exists
                 var noteExists = await _context.Notes
                     .AnyAsync(n => n.Id == request.NoteId);
+
 
                 if (!noteExists)
                 {
@@ -70,7 +83,6 @@ namespace AINotesHub.API.Controllers
                         message = "Note not found."
                     });
                 }
-
 
                 // File size validation
                 if (request.File.Length > MaxFileSize)
@@ -157,6 +169,8 @@ namespace AINotesHub.API.Controllers
 
                     UploadedAt =
                         DateTime.UtcNow
+
+                    //UploadedBy = userId
                 };
 
 

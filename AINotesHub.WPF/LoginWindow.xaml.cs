@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using AINotesHub.Shared.DTOs;
+using AINotesHub.Shared.Routes;
 using AINotesHub.WPF.Helpers;
 using AINotesHub.WPF.Properties;
 using AINotesHub.WPF.Services;
@@ -99,10 +100,10 @@ namespace AINotesHub.WPF
                     Password = password
                 };
 
-                Log.Information("User '{Username}' attempting to log in...", email);
-                //var response = await _httpClient.PostAsJsonAsync("api/auth/login", loginRequest);
+                Log.Information("User '{Username}' ``` to log in...", email);
+                //////var response = await _httpClient.PostAsJsonAsync("api/auth/login", loginRequest);
                 //var response = await _httpClient.PostAsJsonAsync("api/v1/auth/login", loginRequest);
-                var response = await _httpClient.PostAsJsonAsync(ApiEndpoints.Login, loginRequest);
+                var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Login, loginRequest);
 
 
                 //api/v1/Auth/login

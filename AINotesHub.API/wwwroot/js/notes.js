@@ -9,14 +9,16 @@ console.log("AINotesHub.js loaded");
 
 //Feature 4: Connect to API with Fetch
 async function loadNotes() {
-    const response = await fetch("/api/Notes");
+    const response = await fetch(ApiRoutes.notesPaged);
+
+    //const response = await fetch("/api/Notes");
     const notes = await response.json();
     console.log("notes");
 }
 
 async function loadNotes(page) {
 
-   // debugger;
+    // debugger;
 
     try {
         console.log("loadNotes called");

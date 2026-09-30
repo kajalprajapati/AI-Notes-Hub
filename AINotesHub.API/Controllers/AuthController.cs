@@ -13,7 +13,7 @@ using RegisterRequest = AINotesHub.Shared.DTOs.RegisterRequest;
 namespace AINotesHub.API.Controllers
 {
     //[Authorize]login itself normally should NOT require authentication
-    //[Route("api/[controller]")]
+   
     [ApiController]    //AfterAdding APivesion
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]

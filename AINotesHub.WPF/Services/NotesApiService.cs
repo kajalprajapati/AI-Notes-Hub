@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using System.Windows;
 using AINotesHub.Shared.DTOs;
 using AINotesHub.Shared.Entities;
+using AINotesHub.Shared.Routes;
 using AINotesHub.WPF.Helpers;
 using Serilog;
 
@@ -155,7 +156,7 @@ namespace AINotesHub.WPF.Services
                                //var response = await _httpClient.GetAsync("api/notes");
                                //var response = await SendRequest(() => _httpClient.GetAsync("api/v1/Notes"));
 
-                var response = await SendRequest(() => _httpClient.GetAsync(ApiEndpoints.Notes));
+                var response = await SendRequest(() => _httpClient.GetAsync(ApiRoutes.Notes));
 
                 //var response = await SendRequest(
                 //() => _httpClient.GetAsync($"api/notes?page={page}&pageSize={pageSize}"));
